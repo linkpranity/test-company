@@ -92,6 +92,23 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic Pro',sans-serif;background
 
 .empty-msg{text-align:center;padding:3rem;color:var(--gray-400);font-size:14px}
 
+/* ログイン画面 */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background:var(--gray-50)}
+.login-card{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;box-shadow:var(--shadow);padding:2.5rem 2rem;width:100%;max-width:380px;text-align:center}
+.login-logo{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:1.5rem}
+.login-logo-arrow{color:var(--teal);font-size:18px;font-weight:900}
+.login-logo-text{color:var(--teal-deep);font-size:14px;font-weight:700;letter-spacing:.08em}
+.login-card h2{font-size:17px;font-weight:700;color:var(--teal-deep);margin-bottom:.4rem}
+.login-card p{font-size:13px;color:var(--gray-400);margin-bottom:1.75rem}
+.login-input-wrap{text-align:left;margin-bottom:1rem}
+.login-input-wrap label{display:block;font-size:12px;font-weight:700;color:var(--gray-500);margin-bottom:.4rem}
+.login-input{width:100%;border:1.5px solid var(--gray-200);border-radius:8px;padding:.7rem 1rem;font-size:15px;font-family:inherit;color:var(--ink);background:var(--white);transition:border-color .2s;letter-spacing:.1em}
+.login-input:focus{outline:none;border-color:var(--teal)}
+.login-btn{width:100%;background:var(--teal);color:#fff;border:none;border-radius:30px;padding:.8rem;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s;margin-top:.25rem}
+.login-btn:hover{background:var(--teal-dark)}
+.login-error{color:var(--red);font-size:13px;margin-top:.6rem;display:none}
+.login-note{font-size:11px;color:var(--gray-400);margin-top:1rem}
+
 @media(max-width:600px){
   .stat-grid{grid-template-columns:repeat(2,1fr)}
   .ring-wrap{flex-direction:column;align-items:flex-start}
@@ -100,7 +117,26 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic Pro',sans-serif;background
 </style>
 </head>
 <body>
-<header class="header">
+<!-- ログイン画面 -->
+<div id="view-login" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="login-logo-arrow">▶▶</span>
+      <span class="login-logo-text">LINKPRANITY</span>
+    </div>
+    <h2>管理者ログイン</h2>
+    <p>管理者専用ページです。<br>パスワードを入力してください。</p>
+    <div class="login-input-wrap">
+      <label>パスワード</label>
+      <input class="login-input" type="password" id="pw-input" placeholder="••••••••" />
+    </div>
+    <button class="login-btn" onclick="doLogin()">ログイン →</button>
+    <p class="login-error" id="pw-error">パスワードが違います。確認してください。</p>
+    <p class="login-note">※ このページのURLは外部に共有しないでください</p>
+  </div>
+</div>
+
+<header class="header" id="main-header" style="display:none">
   <div class="header-left">
     <span class="logo-arrow">▶▶</span>
     <span class="logo-text">LINKPRANITY</span>
@@ -110,7 +146,7 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic Pro',sans-serif;background
   <span class="admin-badge">管理者専用</span>
 </header>
 
-<div class="container">
+<div class="container" id="main-container" style="display:none">
   <div class="update-time" id="update-time"></div>
   <div class="stat-grid" id="stat-grid"></div>
 
@@ -143,7 +179,29 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic Pro',sans-serif;background
 </div>
 
 <script>
-const Q_MAP={
+// パスワード設定（クライアントごとに変更してください）
+const ADMIN_PASSWORD = 'lp-admin2025';
+
+function doLogin(){
+  const val = document.getElementById('pw-input').value;
+  if(val === ADMIN_PASSWORD){
+    document.getElementById('view-login').style.display = 'none';
+    document.getElementById('main-header').style.display = '';
+    document.getElementById('main-container').style.display = '';
+    render();
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const input = document.getElementById('pw-input');
+  if(input) input.addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+});
+
+
   tenure:'勤続年数',dept:'所属区分',
   relations:'人間関係',relations_detail:'人間関係（詳細）',
   evaluation:'評価制度',evaluation_detail:'評価制度（詳細）',
@@ -297,8 +355,8 @@ function switchTab(tab){
   });
 }
 
-render();
-setInterval(render,30000);
+// ログイン後に render() を呼ぶため、ここでは自動実行しない
+
 </script>
 </body>
 </html>
