@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>月次従業員アンケート | LINKPRANITY</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal:       #0D9E8E;
+  --teal-dark:  #0A7A6E;
+  --teal-deep:  #0F4C5C;
+  --teal-light: #E6F7F5;
+  --teal-border:#A7DED9;
+  --sky:        #38BDF8;
+  --sky-light:  #E0F4FD;
+  --ink:        #1A2E35;
+  --gray-50:    #F7FAFA;
+  --gray-100:   #EDF3F3;
+  --gray-200:   #D4E2E1;
+  --gray-400:   #8BADB0;
+  --gray-500:   #5F868A;
+  --gray-700:   #2E5156;
+  --white:      #FFFFFF;
+  --red:        #DC2626;
+  --red-light:  #FEF2F2;
+  --amber:      #D97706;
+  --amber-light:#FFFBEB;
+  --radius:     14px;
+  --shadow:     0 1px 4px rgba(13,158,142,.08), 0 4px 18px rgba(13,158,142,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic Pro',sans-serif;background:var(--gray-50);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ヘッダー */
+.header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:.8rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-wrap{display:flex;align-items:center;gap:.5rem}
+.logo-arrow{color:var(--teal);font-size:16px;font-weight:900}
+.logo-text{color:var(--teal-deep);font-size:13px;font-weight:700;letter-spacing:.08em}
+.header-sub{font-size:12px;color:var(--gray-400)}
+
+.container{max-width:620px;margin:0 auto;padding:2rem 1rem 5rem}
+
+/* イントロカード */
+.intro-card{background:var(--white);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:1.5rem;border:1px solid var(--gray-200)}
+.intro-top{background:linear-gradient(135deg, var(--teal-deep) 0%, var(--teal) 100%);padding:2rem 1.5rem 1.75rem;position:relative;overflow:hidden}
+.intro-top::after{content:'REAL VOICES';position:absolute;right:-10px;bottom:-8px;font-size:52px;font-weight:900;color:rgba(255,255,255,.06);letter-spacing:-.02em;white-space:nowrap}
+.intro-top h1{color:#fff;font-size:19px;font-weight:700;line-height:1.5;margin-bottom:.6rem}
+.intro-top p{color:rgba(255,255,255,.82);font-size:13px;line-height:1.75}
+.intro-body{padding:1.25rem 1.5rem 1.5rem}
+.notice-item{display:flex;align-items:flex-start;gap:.6rem;font-size:13px;color:var(--gray-700);line-height:1.65;margin-bottom:.45rem}
+.notice-icon{width:18px;height:18px;background:var(--teal-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:.15rem;color:var(--teal);font-weight:900}
+.intro-footer{border-top:1px solid var(--gray-100);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.time-badge{font-size:12px;color:var(--gray-400)}
+.btn-start{background:var(--teal);color:#fff;border:none;border-radius:30px;padding:.65rem 1.6rem;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s;letter-spacing:.02em}
+.btn-start:hover{background:var(--teal-dark)}
+
+/* プログレス */
+.progress-wrap{margin-bottom:1.25rem}
+.progress-meta{display:flex;justify-content:space-between;margin-bottom:.5rem}
+.progress-step{font-size:13px;font-weight:700;color:var(--teal)}
+.progress-pct{font-size:12px;color:var(--gray-400)}
+.progress-track{height:5px;background:var(--gray-200);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal-deep),var(--teal),var(--sky));border-radius:3px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+/* 質問カード */
+.q-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.5rem 1.25rem;margin-bottom:1rem;border:1px solid var(--gray-200);animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.q-badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;color:var(--teal-dark);background:var(--teal-light);padding:.2rem .65rem;border-radius:20px;margin-bottom:.65rem;letter-spacing:.04em;border:1px solid var(--teal-border)}
+.q-badge.opt{color:var(--gray-500);background:var(--gray-100);border-color:var(--gray-200)}
+.q-text{font-size:15px;font-weight:700;color:var(--teal-deep);line-height:1.55;margin-bottom:.3rem}
+.q-note{font-size:12px;color:var(--gray-400);line-height:1.65;margin-bottom:1rem}
+
+/* ラジオ */
+.radio-vert{display:flex;flex-direction:column;gap:.45rem}
+.radio-vert input[type=radio]{display:none}
+.radio-vert label{display:flex;align-items:center;gap:.75rem;border:1.5px solid var(--gray-200);border-radius:8px;padding:.7rem 1rem;cursor:pointer;font-size:14px;color:var(--gray-700);transition:all .15s}
+.radio-vert label::before{content:'';width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);flex-shrink:0;transition:all .15s;background:#fff}
+.radio-vert input:checked+label{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark);font-weight:700}
+.radio-vert input:checked+label::before{border-color:var(--teal);background:var(--teal);box-shadow:inset 0 0 0 3px #fff}
+.radio-vert label:hover{border-color:var(--teal-border);background:var(--teal-light)}
+
+/* チェックボックス */
+.check-grid{display:flex;flex-wrap:wrap;gap:.4rem}
+.check-pill input[type=checkbox]{display:none}
+.check-pill label{display:flex;align-items:center;border:1.5px solid var(--gray-200);border-radius:20px;padding:.4rem .85rem;cursor:pointer;font-size:13px;color:var(--gray-700);transition:all .15s;user-select:none}
+.check-pill input:checked+label{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark);font-weight:700}
+.check-pill label:hover{border-color:var(--teal-border);background:var(--teal-light)}
+
+/* フォローアップ */
+.followup-box{background:var(--gray-50);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:1rem 1rem 1rem 1.1rem;margin-top:.85rem;display:none}
+.followup-box.show{display:block;animation:fadeUp .2s ease}
+.followup-label{font-size:13px;font-weight:700;color:var(--teal-deep);margin-bottom:.5rem}
+.followup-note{font-size:12px;color:var(--gray-400);margin-bottom:.5rem}
+
+/* テキストエリア */
+textarea{width:100%;border:1.5px solid var(--gray-200);border-radius:8px;padding:.75rem 1rem;font-size:14px;font-family:inherit;color:var(--ink);background:var(--white);resize:vertical;min-height:90px;line-height:1.65;transition:border-color .2s}
+textarea:focus{outline:none;border-color:var(--teal)}
+
+/* ナビ */
+.nav-wrap{display:flex;gap:.65rem;margin-top:1.25rem}
+.btn-back{background:var(--white);color:var(--gray-500);border:1.5px solid var(--gray-200);border-radius:30px;padding:.75rem 1.25rem;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-back:hover{border-color:var(--teal);color:var(--teal)}
+.btn-next{flex:1;background:var(--teal);color:#fff;border:none;border-radius:30px;padding:.75rem;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s;letter-spacing:.02em}
+.btn-next:hover{background:var(--teal-dark)}
+
+/* 完了 */
+.thanks-card{background:var(--white);border-radius:20px;box-shadow:var(--shadow);padding:2.5rem 1.5rem;text-align:center;margin-top:1.5rem;border:1px solid var(--gray-200)}
+.thanks-icon{width:72px;height:72px;background:var(--teal-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:32px;border:2px solid var(--teal-border)}
+.thanks-card h2{font-size:20px;font-weight:700;color:var(--teal-deep);margin-bottom:.65rem}
+.thanks-card p{font-size:14px;color:var(--gray-500);line-height:1.8;margin-bottom:1.5rem}
+.consult-card{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:var(--radius);padding:1.25rem;text-align:left;margin-bottom:1.5rem}
+.consult-card h3{font-size:14px;font-weight:700;color:var(--teal-deep);margin-bottom:.5rem}
+.consult-card p{font-size:13px;color:var(--gray-700);line-height:1.7;margin-bottom:.75rem}
+.btn-consult{display:inline-block;background:var(--teal);color:#fff;border-radius:30px;padding:.55rem 1.4rem;font-size:13px;font-weight:700;text-decoration:none;transition:background .2s}
+.btn-consult:hover{background:var(--teal-dark)}
+.btn-reset{background:none;border:none;color:var(--gray-400);font-size:13px;cursor:pointer;font-family:inherit;text-decoration:underline}
+
+@media(max-width:480px){
+  .container{padding:1.25rem .75rem 4rem}
+  .intro-top{padding:1.5rem 1.25rem}
+  .q-card{padding:1.25rem 1rem}
+  .intro-footer{flex-direction:column;gap:.75rem;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="logo-wrap">
+    <span class="logo-arrow">▶▶</span>
+    <span class="logo-text">LINKPRANITY</span>
+  </div>
+  <span class="header-sub">月次従業員アンケート</span>
+</header>
+
+<div class="container">
+  <!-- イントロ -->
+  <div id="view-intro">
+    <div class="intro-card">
+      <div class="intro-top">
+        <h1>リンクプラニティ<br>8〜30人向けフォーム</h1>
+        <p>皆さまが安心して働ける職場づくりのために実施しています。<br>日々感じていることを、率直に教えていただけると助かります。</p>
+      </div>
+      <div class="intro-body">
+        <div class="notice-item"><div class="notice-icon">✓</div>本フォームは匿名で実施しています</div>
+        <div class="notice-item"><div class="notice-icon">✓</div>個人が特定される情報（メールアドレス、IPアドレス）は収集していません</div>
+        <div class="notice-item"><div class="notice-icon">✓</div>回答内容は個人評価には一切使用しません</div>
+        <div class="notice-item"><div class="notice-icon">✓</div>回答の有無や内容によって不利益が生じることはありません</div>
+      </div>
+      <div class="intro-footer">
+        <div class="time-badge">⏱ 所要時間：約3〜5分</div>
+        <button class="btn-start" onclick="startSurvey()">回答を始める →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- アンケート -->
+  <div id="view-survey" style="display:none">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span class="progress-step" id="prog-label">質問 1 / 12</span>
+        <span class="progress-pct" id="prog-pct">8%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:8%"></div></div>
+    </div>
+    <div id="q-wrap"></div>
+    <div class="nav-wrap">
+      <button class="btn-back" id="btn-back" onclick="prevQ()" style="display:none">← 戻る</button>
+      <button class="btn-next" id="btn-next" onclick="nextQ()">次へ →</button>
+    </div>
+  </div>
+
+  <!-- 完了 -->
+  <div id="view-thanks" style="display:none">
+    <div class="thanks-card">
+      <div class="thanks-icon">✓</div>
+      <h2>ご回答ありがとうございました</h2>
+      <p>皆様の声はより良い組織づくりのために活用されます。</p>
+      <div class="consult-card" id="consult-block" style="display:none">
+        <h3>個別相談をご希望の方へ</h3>
+        <p>電話またはオンラインでの個別相談をご希望される方は、以下のURLから日程の調整をお願いいたします。</p>
+        <a class="btn-consult" href="https://timerex.net/s/link.pranity_9271/6ba775f4" target="_blank">日程を予約する →</a>
+        <p style="margin-top:.75rem;font-size:12px;color:var(--gray-500)">メール相談：<strong>info@linkpranity.com</strong><br>（件名：個別相談希望／会社名・相談内容をご記入ください）</p>
+      </div>
+      <button class="btn-reset" onclick="resetAll()">TOPに戻る</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {id:'tenure', badge:'必須', text:'勤続年数を教えてください', type:'radio',
+    options:['1年未満','1〜3年','3〜5年','5〜10年','10年以上'], required:true},
+  {id:'dept', badge:'必須', text:'所属区分を教えてください', type:'radio',
+    options:['経営・役員','管理職（部長・課長）','リーダー・主任','一般社員','パート・アルバイト','その他'], required:true},
+  {id:'relations', badge:'必須', text:'職場内の人間関係について、どのように感じていますか？', type:'radio',
+    options:['とても満足している','やや満足している','どちらでもない','やや不満','とても不満'], required:true,
+    followUp:{trigger:['やや不満','とても不満'], id:'relations_detail',
+      label:'どのような不満をお持ちか教えてください。', note:'例：意見を言いづらい場面がある など'}},
+  {id:'evaluation', badge:'必須', text:'評価制度について、どのように感じていますか？', type:'radio',
+    options:['とても満足している','やや満足している','どちらでもない','やや不満','とても不満'], required:true,
+    followUp:{trigger:['やや不満','とても不満'], id:'evaluation_detail',
+      label:'どのような不満をお持ちか教えてください。', note:'例：評価基準が分かりにくい など'}},
+  {id:'workload', badge:'必須', text:'業務量について、どのように感じていますか？', type:'radio',
+    options:['とても満足している','やや満足している','どちらでもない','やや不満','とても不満'], required:true,
+    followUp:{trigger:['やや不満','とても不満'], id:'workload_detail',
+      label:'どのような不満をお持ちか教えてください。', note:'例：業務の波が大きい／時間内に終わらない日がある など'}},
+  {id:'stay', badge:'必須', text:'今後もこの会社で働き続けたいと思いますか？', type:'radio',
+    options:['とてもそう思う','ややそう思う','あまり思わない','全く思わない'], required:true},
+  {id:'concerns', badge:'必須', text:'現在、不安や課題を感じているものはありますか？（複数選択可）', type:'checkbox',
+    options:['ハラスメント','人間関係','評価制度','給与・待遇','業務量','経営方針','コンプライアンス','情報共有不足','将来への不安','その他','特になし'], required:true},
+  {id:'speak_up', badge:'必須', text:'職場で「言いづらい」と感じていることはありますか？', type:'radio',
+    options:['ある','少しある','ほとんどない','まったくない'], required:true},
+  {id:'free_comment', badge:'任意', text:'現在感じている課題や改善してほしい点があればご記入ください',
+    note:'例：情報共有を増やしてほしい／相談しやすい仕組みがあるとよい など', type:'textarea', required:false},
+  {id:'harassment', badge:'任意', text:'ハラスメントや重大な懸念がある場合はご記入ください',
+    note:'秘匿性のあるアンケートです。安心してお答えください。', type:'textarea', required:false},
+  {id:'incident', badge:'任意', text:'職場で気になる言動や違和感を感じた出来事があれば教えてください',
+    note:'例：言い方がきついと感じた／冗談でも気になる発言があった など', type:'textarea', required:false},
+  {id:'consult', badge:'必須', text:'個別相談を希望しますか？',
+    note:'「はい」を選んだ方には、回答完了後に日程調整URLをご案内します。', type:'radio',
+    options:['はい、希望する','いいえ、不要です'], required:true}
+];
+
+const TOTAL=QUESTIONS.length;
+let current=0, answers={};
+
+function startSurvey(){
+  document.getElementById('view-intro').style.display='none';
+  document.getElementById('view-survey').style.display='block';
+  current=0; answers={}; renderQ();
+}
+
+function renderQ(){
+  const q=QUESTIONS[current];
+  const pct=Math.round(((current+1)/TOTAL)*100);
+  document.getElementById('prog-label').textContent=`質問 ${current+1} / ${TOTAL}`;
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('btn-back').style.display=current>0?'block':'none';
+  document.getElementById('btn-next').textContent=current===TOTAL-1?'回答を送信する ✓':'次へ →';
+
+  let html=`<div class="q-card"><div class="q-badge${q.badge==='任意'?' opt':''}">${q.badge}</div>
+    <div class="q-text">${q.text}</div>${q.note?`<div class="q-note">${q.note}</div>`:''}`;
+
+  if(q.type==='radio'){
+    html+=`<div class="radio-vert">`;
+    q.options.forEach((opt,i)=>{
+      const chk=answers[q.id]===opt;
+      html+=`<div><input type="radio" name="${q.id}" id="${q.id}_${i}" value="${opt}" ${chk?'checked':''} onchange="onRadio('${q.id}','${opt}')"><label for="${q.id}_${i}">${opt}</label></div>`;
+    });
+    html+=`</div>`;
+    if(q.followUp){
+      const vis=q.followUp.trigger.includes(answers[q.id]);
+      html+=`<div class="followup-box${vis?' show':''}" id="fu_${q.id}">
+        <div class="followup-label">${q.followUp.label}</div>
+        ${q.followUp.note?`<div class="followup-note">${q.followUp.note}</div>`:''}
+        <textarea placeholder="自由にご記入ください" onchange="answers['${q.followUp.id}']=this.value">${answers[q.followUp.id]||''}</textarea>
+      </div>`;
+    }
+  } else if(q.type==='checkbox'){
+    const sel=answers[q.id]||[];
+    html+=`<div class="check-grid">`;
+    q.options.forEach((opt,i)=>{
+      html+=`<div class="check-pill"><input type="checkbox" id="${q.id}_${i}" value="${opt}" ${sel.includes(opt)?'checked':''} onchange="onCheck('${q.id}','${opt}',this.checked)"><label for="${q.id}_${i}">${opt}</label></div>`;
+    });
+    html+=`</div>`;
+  } else if(q.type==='textarea'){
+    html+=`<textarea placeholder="${q.note||''}" onchange="answers['${q.id}']=this.value">${answers[q.id]||''}</textarea>`;
+  }
+  html+=`</div>`;
+  document.getElementById('q-wrap').innerHTML=html;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function onRadio(id,val){
+  answers[id]=val;
+  const q=QUESTIONS[current];
+  if(q.followUp){
+    const box=document.getElementById('fu_'+id);
+    if(box){
+      if(q.followUp.trigger.includes(val)) box.classList.add('show');
+      else{box.classList.remove('show');delete answers[q.followUp.id];}
+    }
+  }
+}
+
+function onCheck(id,val,checked){
+  if(!answers[id]) answers[id]=[];
+  if(checked){if(!answers[id].includes(val)) answers[id].push(val);}
+  else answers[id]=answers[id].filter(v=>v!==val);
+}
+
+function nextQ(){
+  const q=QUESTIONS[current];
+  if(q.required){
+    const val=answers[q.id];
+    if(q.type==='checkbox'){if(!val||val.length===0){alert('この質問は必須です。1つ以上選択してください。');return;}}
+    else if(q.type!=='textarea'){if(!val){alert('この質問は必須です。選択してください。');return;}}
+  }
+  if(current===TOTAL-1) submitSurvey();
+  else{current++;renderQ();}
+}
+
+function prevQ(){if(current>0){current--;renderQ();}}
+
+function submitSurvey(){
+  const all=JSON.parse(localStorage.getItem('lp_responses')||'[]');
+  all.push({id:Date.now(),time:new Date().toLocaleString('ja-JP'),answers:{...answers}});
+  localStorage.setItem('lp_responses',JSON.stringify(all));
+  document.getElementById('view-survey').style.display='none';
+  document.getElementById('view-thanks').style.display='block';
+  if(answers['consult']==='はい、希望する') document.getElementById('consult-block').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetAll(){
+  current=0;answers={};
+  document.getElementById('view-thanks').style.display='none';
+  document.getElementById('view-intro').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
