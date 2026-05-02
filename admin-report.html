@@ -157,6 +157,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--gray-50);color:var(-
       ✨ AI分析を実行
     </button>
     <button class="btn-print" onclick="window.print()">🖨️ 印刷・PDF</button>
+    <button class="btn-print" onclick="resetAPIKey()" title="APIキーをリセット">🔑</button>
   </div>
 </header>
 
@@ -301,7 +302,20 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--gray-50);color:var(-
 // ============================================================
 // APIキー（ハードコード）
 // ============================================================
-const API_KEY = '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';
+// APIキーはlocalStorageから取得（HTMLには書かない）
+function getAPIKey() {
+  let key = localStorage.getItem('lp_api_key');
+  if (!key) {
+    key = prompt('Anthropic APIキーを入力してください\n（入力後はブラウザに保存されます）');
+    if (key && key.startsWith('sk-ant-')) {
+      localStorage.setItem('lp_api_key', key);
+    } else {
+      alert('正しいAPIキーを入力してください（sk-ant-で始まる文字列）');
+      return null;
+    }
+  }
+  return key;
+}
 
 // ============================================================
 // データ取得
@@ -599,6 +613,9 @@ function renderVoices(R) {
 // AI分析実行
 // ============================================================
 async function runAIAnalysis() {
+  const apiKey = getAPIKey();
+  if (!apiKey) return;
+
   const R = getResponses();
   if (!R.length) {
     alert('回答データがありません。アンケートに回答してから実行してください。');
@@ -706,7 +723,7 @@ ${harassComments ? harassComments.slice(0, 300) : 'なし'}
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': API_KEY,
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
@@ -753,6 +770,14 @@ ${harassComments ? harassComments.slice(0, 300) : 'なし'}
   } finally {
     btn.disabled = false;
     btn.textContent = '✨ AI分析を実行';
+  }
+}
+
+// APIキーリセット
+function resetAPIKey() {
+  if (confirm('保存済みのAPIキーを削除しますか？\n次回AI分析時に再入力が必要です。')) {
+    localStorage.removeItem('lp_api_key');
+    alert('APIキーを削除しました。');
   }
 }
 
