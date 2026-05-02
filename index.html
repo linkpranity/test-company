@@ -187,6 +187,14 @@ textarea:focus{outline:none;border-color:var(--teal)}
         <a class="btn-consult" href="https://timerex.net/s/link.pranity_9271/6ba775f4" target="_blank">日程を予約する →</a>
         <p style="margin-top:.75rem;font-size:12px;color:var(--gray-500)">メール相談：<strong>info@linkpranity.com</strong><br>（件名：個別相談希望／会社名・相談内容をご記入ください）</p>
       </div>
+      <div style="margin-bottom:1rem;padding-top:.75rem;border-top:1px solid var(--gray-200)">
+        <p style="font-size:12px;color:var(--gray-400);line-height:1.8">
+          本アンケートで取得した情報は、株式会社リンクプラニティの
+          <a href="https://www.linkpranity.com/privacy/" target="_blank"
+            style="color:var(--teal);text-decoration:underline">プライバシーポリシー</a>
+          に基づき適切に管理されます。
+        </p>
+      </div>
       <button class="btn-reset" onclick="resetAll()">TOPに戻る</button>
     </div>
   </div>
@@ -197,7 +205,9 @@ const QUESTIONS = [
   {id:'tenure', badge:'必須', text:'勤続年数を教えてください', type:'radio',
     options:['1年未満','1〜3年','3〜5年','5〜10年','10年以上'], required:true},
   {id:'dept', badge:'必須', text:'所属区分を教えてください', type:'radio',
-    options:['経営・役員','管理職（部長・課長）','リーダー・主任','一般社員','パート・アルバイト','その他'], required:true},
+    options:['経営・役員','管理職（部長・課長）','リーダー・主任','一般社員','パート・アルバイト','その他'], required:true,
+    followUp:{trigger:['その他'], id:'dept_other',
+      label:'所属区分を具体的にご記入ください。', note:'例：派遣社員、契約社員、顧問 など'}},
   {id:'relations', badge:'必須', text:'職場内の人間関係について、どのように感じていますか？', type:'radio',
     options:['とても満足している','やや満足している','どちらでもない','やや不満','とても不満'], required:true,
     followUp:{trigger:['やや不満','とても不満'], id:'relations_detail',

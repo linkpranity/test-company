@@ -130,7 +130,7 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic Pro',sans-serif;background
         <button class="pw-toggle" type="button" id="pw-toggle-btn" onclick="togglePw()">👁</button>
       </div>
     </div>
-    <button class="login-btn" onclick="doLogin()">ログイン →</button>
+    <button class="login-btn" onclick="doLogin().catch(console.error)">ログイン →</button>
     <p class="login-error" id="pw-error">パスワードが違います。確認してください。</p>
     <p class="login-note">※ このページのURLは外部に共有しないでください</p>
   </div>
@@ -182,7 +182,7 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic Pro',sans-serif;background
 // ============================================================
 // パスワード設定（クライアントごとに変更してください）
 // ============================================================
-var ADMIN_PASSWORD = 'lp-admin2025';
+var ADMIN_HASH = '1d9e455b7e8938d52e93f862bcf9dcffa5fdb56e6188f75fc58015767b6e8fe8';
 
 // ============================================================
 // ログイン処理
@@ -199,9 +199,14 @@ function togglePw() {
   }
 }
 
-function doLogin() {
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+async function doLogin() {
   var val = document.getElementById('pw-input').value;
-  if (val === ADMIN_PASSWORD) {
+  var hash = await sha256(val);
+  if (hash === ADMIN_HASH) {
     document.getElementById('view-login').style.display = 'none';
     document.getElementById('main-header').style.display = '';
     document.getElementById('main-container').style.display = '';
@@ -228,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
 var Q_MAP = {
   tenure: '勤続年数',
   dept: '所属区分',
+  dept_other: '所属区分（その他詳細）',
   relations: '人間関係',
   relations_detail: '人間関係（詳細）',
   evaluation: '評価制度',
