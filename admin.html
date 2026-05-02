@@ -128,7 +128,10 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic Pro',sans-serif;background
     <p>管理者専用ページです。<br>パスワードを入力してください。</p>
     <div class="login-input-wrap">
       <label>パスワード</label>
-      <input class="login-input" type="password" id="pw-input" placeholder="••••••••" />
+      <div style="position:relative">
+        <input class="login-input" type="password" id="pw-input" placeholder="パスワードを入力" style="padding-right:3rem" />
+        <button onclick="togglePw()" type="button" id="pw-toggle" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;color:var(--gray-400);padding:0;line-height:1">👁</button>
+      </div>
     </div>
     <button class="login-btn" onclick="doLogin()">ログイン →</button>
     <p class="login-error" id="pw-error">パスワードが違います。確認してください。</p>
@@ -201,8 +204,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
   if(input) input.addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
 });
 
+function togglePw(){
+  const input = document.getElementById('pw-input');
+  const btn = document.getElementById('pw-toggle');
+  if(input.type==='password'){
+    input.type='text';
+    btn.textContent='🙈';
+  } else {
+    input.type='password';
+    btn.textContent='👁';
+  }
+}
 
-  tenure:'勤続年数',dept:'所属区分',
+const Q_MAP={
   relations:'人間関係',relations_detail:'人間関係（詳細）',
   evaluation:'評価制度',evaluation_detail:'評価制度（詳細）',
   workload:'業務量',workload_detail:'業務量（詳細）',
