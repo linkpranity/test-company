@@ -1384,7 +1384,7 @@ function syncClientInfo() {
 function updateResponseRate(employeeCount) {
   const R = getResponses();
   const total = R.length;
-  const cnt = parseInt(employeeCount) || 0;
+  const cnt = parseInt(String(employeeCount).replace(/[^0-9]/g, '')) || 0;
   const rate = cnt > 0 ? Math.round(total / cnt * 100) : null;
   document.getElementById('kpi-rate').textContent = rate !== null ? rate + '%' : '—%';
 }
@@ -1585,21 +1585,18 @@ ${Object.entries(compactData).map(([k,v])=>`・${k}：${v}`).join('\n')}
 以下の5セクションを順番に全て完成させること：
 
 <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【1】組織診断サマリー</h3>
-3層構造で記述：①${surveyData.businessDescription}業界全体の課題（統計・離職率・ハラスメント傾向）②今回のアンケート結果の課題③${surveyData.clientName}固有の課題
+3層構造で各層2〜3段落以内で簡潔に記述：①${surveyData.businessDescription}業界全体の課題 ②今回のアンケート結果の課題 ③${surveyData.clientName}固有の課題
 
 <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【2】主要課題（優先度順3件）</h3>
-各課題に優先度・数値根拠・影響範囲・リスク度を記載。tableで表示。
+優先度・課題・数値根拠・リスク度の4列tableで3行。
 
 <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【3】リスクアセスメント</h3>
-🔴離職リスク・🔴コンプライアンスリスク・🟡組織硬直化リスクをそれぞれtableで表示。
+🔴離職リスク・🔴コンプライアンスリスク・🟡組織硬直化リスクを各3〜4行のtableで表示。
 
 <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【4】改善提案アクションプラン</h3>
-即時（1週間以内）・短期（1〜3ヶ月）・中長期（3〜12ヶ月）の3フェーズをtableで表示。各施策にKPI・担当者を含む。
+フェーズ・施策・担当・KPIの4列table。即時（1週間以内）2行・短期（1〜3ヶ月）2行・中長期（3〜12ヶ月）2行の計6行で完結させること。
 
-<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【5】LINKPRANITYからの所見</h3>
-追加調査・外部窓口設置・エスカレーション提言を具体的に記載。
-
-【5】まで必ず完成させること。途中で終わらないこと。`;
+必ず【4】まで完成させること。`;
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
