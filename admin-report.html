@@ -1416,6 +1416,7 @@ function initReport() {
   document.getElementById('kpi-total').textContent = d.total;
   document.getElementById('kpi-harassment').textContent = d.risks.harassment.count;
   document.getElementById('kpi-resign').textContent = d.risks.resign.count;
+  document.getElementById('kpi-rate').textContent = '—%'; // 従業員数読込前の初期値
 
   renderScores(d);
   renderRisks(d);
@@ -1424,7 +1425,7 @@ function initReport() {
   renderCrossTable('roleTableBody', d.role);
   renderVoices(d);
   renderCharts(d);
-  loadClientInfo();
+  loadClientInfo(); // ← ここで従業員数を読んで回答率を更新する
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -1550,11 +1551,24 @@ async function runAIAnalysis() {
     industryContext = `【サービス業全般の特性】厚生労働省の「令和5年雇用動向調査」によるとサービス業の年間離職率は約15〜20%と全産業平均（約14%）を上回る。人手不足による一人当たり業務量の増大、賃金水準の低さ、キャリアパスの不明確さが離職の主要因。`;
   }
 
+  // プロンプトに渡すデータを必要最小限に圧縮
+  const compactData = {
+    回答数: `${d.total}名／従業員${surveyData.employeeCount}名（回答率${surveyData.responseRate}）`,
+    スコア: `人間関係${d.scores.relations}点・評価制度${d.scores.evaluation}点・業務量${d.scores.workload}点・継続就業${d.scores.stay}点・発言しやすさ${d.scores.speak}点`,
+    リスク: `離職検討${d.risks.resign.pct}%（${d.risks.resign.count}名）・ハラスメント報告${d.risks.harassment.pct}%（${d.risks.harassment.count}名）・言いづらさ${d.risks.speak.pct}%（${d.risks.speak.count}名）`,
+    不安課題TOP5: d.concerns.map(c=>`${c.name}${c.pct}%（${c.count}名）`).join('、'),
+    勤続年数別: d.tenure.map(t=>`${t.group}${t.count}名：人間関係${t.relations}・業務量${t.workload}・継続意向${t.stay}`).join(' ／ '),
+    役職別: d.role.map(r=>`${r.group}${r.count}名：人間関係${r.relations}・業務量${r.workload}・継続意向${r.stay}`).join(' ／ '),
+    一般コメント: d.voices.free.join('／'),
+    ハラスメント報告: d.voices.harassment.join('／'),
+  };
+
   const prompt = `あなたはLINKPRANITY（株式会社リンクプラニティ）の組織コンサルタントです。以下のデータをもとにHTMLレポートを作成してください。
 
 【クライアント情報】企業名：${surveyData.clientName} ／ 従業員数：${surveyData.employeeCount}名 ／ 事業内容：${surveyData.businessDescription}
 【業界知見】${industryContext}
-【アンケート結果】${JSON.stringify(surveyData, null, 2)}
+【アンケートデータ】
+${Object.entries(compactData).map(([k,v])=>`・${k}：${v}`).join('\n')}
 
 【出力ルール】コードフェンス禁止。html/head/bodyタグ禁止。
 - h3: <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">
@@ -1566,26 +1580,26 @@ async function runAIAnalysis() {
 - th: <th style="background:#0F4C5C;color:#fff;padding:8px 12px;text-align:left;font-size:11px;">
 - td: <td style="padding:8px 12px;border-bottom:1px solid #D4E2E1;color:#0F2A2A;vertical-align:top;">
 - 偶数行tr: <tr style="background:#E6F7F5;">
-- リスク: 🔴🟡🟢
+- リスク表記: 🔴🟡🟢
 
-以下の5セクションを順番に、全て完成させること：
+以下の5セクションを順番に全て完成させること：
 
 <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【1】組織診断サマリー</h3>
 3層構造で記述：①${surveyData.businessDescription}業界全体の課題（統計・離職率・ハラスメント傾向）②今回のアンケート結果の課題③${surveyData.clientName}固有の課題
 
 <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【2】主要課題（優先度順3件）</h3>
-各課題に優先度・数値根拠・影響範囲・リスク度を記載
+各課題に優先度・数値根拠・影響範囲・リスク度を記載。tableで表示。
 
 <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【3】リスクアセスメント</h3>
-🔴離職リスク・🔴コンプライアンスリスク・🟡組織硬直化リスクをそれぞれtableで表示
+🔴離職リスク・🔴コンプライアンスリスク・🟡組織硬直化リスクをそれぞれtableで表示。
 
 <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【4】改善提案アクションプラン</h3>
-即時（1週間以内）・短期（1〜3ヶ月）・中長期（3〜12ヶ月）の3フェーズをtableで表示
+即時（1週間以内）・短期（1〜3ヶ月）・中長期（3〜12ヶ月）の3フェーズをtableで表示。各施策にKPI・担当者を含む。
 
 <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【5】LINKPRANITYからの所見</h3>
-追加調査・外部窓口設置・エスカレーション提言を記載
+追加調査・外部窓口設置・エスカレーション提言を具体的に記載。
 
-【5】まで必ず完成させること。`;
+【5】まで必ず完成させること。途中で終わらないこと。`;
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
