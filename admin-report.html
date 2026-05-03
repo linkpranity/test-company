@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>組織分析レポート | LINKPRANITY</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Noto+Serif+JP:wght@400;700&display=swap');
+
+  :root {
+    --teal:        #0D9E8E;
+    --teal-dark:   #0A7A6E;
+    --teal-deep:   #0F4C5C;
+    --teal-light:  #E6F7F5;
+    --teal-border: #A7DED9;
+    --accent:      #0D9E8E;
+    --accent2:     #F59E0B;
+    --danger:      #DC2626;
+    --warning:     #D97706;
+    --success:     #059669;
+    --bg:          #F7FAFA;
+    --card:        #ffffff;
+    --text:        #0F2A2A;
+    --text-light:  #3D6464;
+    --border:      #D4E2E1;
+    --shadow:      0 1px 4px rgba(13,158,142,0.08), 0 4px 18px rgba(13,158,142,0.06);
+    --radius:      12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* ===== HEADER ===== */
+  .report-header {
+    background: #ffffff;
+    border-bottom: 3px solid var(--teal);
+    padding: 20px 40px 18px;
+    position: relative;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  .header-left h1 {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    margin-bottom: 2px;
+    color: var(--teal-deep);
+  }
+  .header-left .company-placeholder {
+    font-size: 13px;
+    color: var(--text-light);
+    font-style: italic;
+  }
+  .header-meta {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 4px;
+  }
+  .report-badge {
+    background: var(--teal-light);
+    border: 1px solid var(--teal-border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--teal-dark);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-area img {
+    height: 32px;
+  }
+
+  /* ===== KPI BAR ===== */
+  .kpi-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: var(--teal-deep);
+    border-top: none;
+  }
+  .kpi-item {
+    padding: 14px 20px;
+    text-align: center;
+    color: #ffffff;
+    border-right: 1px solid rgba(255,255,255,0.12);
+  }
+  .kpi-item:last-child { border-right: none; }
+  .kpi-value {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+    color: #ffffff;
+  }
+  .kpi-value.danger { color: #FCA5A5; }
+  .kpi-value.warning { color: #FCD34D; }
+  .kpi-label { font-size: 11px; color: rgba(255,255,255,0.75); }
+
+  /* ===== MAIN CONTENT ===== */
+  .main-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 24px;
+  }
+
+  /* ===== SECTION TITLES ===== */
+  .section-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--teal-deep);
+    border-left: 4px solid var(--teal);
+    padding-left: 12px;
+    margin-bottom: 16px;
+    letter-spacing: 0.03em;
+  }
+  .section-subtitle {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal-dark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ===== SCORE BAR ===== */
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .score-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border-top: 3px solid transparent;
+    position: relative;
+  }
+  .score-card.danger { border-top-color: var(--danger); }
+  .score-card.warning { border-top-color: var(--warning); }
+  .score-card.success { border-top-color: var(--success); }
+  .score-label { font-size: 11px; color: var(--text-light); margin-bottom: 4px; font-weight: 700; }
+  .score-number { font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+  .score-number.danger { color: var(--danger); }
+  .score-number.warning { color: var(--warning); }
+  .score-number.success { color: var(--success); }
+  .score-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .score-badge.danger { background: #fde8ea; color: var(--danger); }
+  .score-badge.warning { background: #fff3e0; color: #d4820a; }
+  .score-badge.success { background: #e8f8ee; color: #1a8a45; }
+  .score-bar-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .score-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .card-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .card-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* ===== RISK CIRCLES ===== */
+  .risk-circles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .risk-circle-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .circle-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 10px;
+  }
+  .circle-container svg { transform: rotate(-90deg); }
+  .circle-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: 900;
+  }
+  .risk-count {
+    font-size: 24px;
+    font-weight: 900;
+  }
+  .risk-desc { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+  /* ===== DISTRIBUTION BARS ===== */
+  .dist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+  .dist-label { width: 130px; flex-shrink: 0; text-align: right; color: var(--text-light); }
+  .dist-track { flex: 1; height: 20px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .dist-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; color: white; font-size: 11px; font-weight: 700; transition: width 1s ease; }
+  .dist-count { width: 60px; flex-shrink: 0; color: var(--text-light); font-size: 11px; }
+  .dist-pos { background: linear-gradient(90deg, #059669, #0D9E8E); }
+  .dist-neu { background: linear-gradient(90deg, #0D9E8E, #0F4C5C); }
+  .dist-neg { background: linear-gradient(90deg, #D97706, #B45309); }
+  .dist-very-neg { background: linear-gradient(90deg, #DC2626, #9B1C1C); }
+
+  /* ===== CROSS ANALYSIS TABLE ===== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  th {
+    background: var(--teal-deep);
+    color: #ffffff;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 11px;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    color: var(--text);
+  }
+  tr:nth-child(even) td { background: var(--teal-light); }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .tag.danger { background: #fde8ea; color: var(--danger); }
+  .tag.warning { background: #fef3c7; color: var(--warning); }
+  .tag.success { background: #d1fae5; color: var(--success); }
+
+  /* ===== VOICE CARDS ===== */
+  .voice-card {
+    border-left: 3px solid var(--border);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    background: var(--bg);
+    border-radius: 0 8px 8px 0;
+    font-size: 12px;
+    color: var(--text);
+  }
+  .voice-card.harassment {
+    border-left-color: var(--danger);
+    background: #fff5f5;
+  }
+  .voice-card.general {
+    border-left-color: var(--teal);
+    background: var(--teal-light);
+  }
+  .voice-icon { margin-right: 6px; }
+
+  /* ===== AI ANALYSIS SECTION ===== */
+  .ai-section {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 2px solid var(--teal-border);
+    padding: 28px;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--teal-light);
+    border: 1px solid var(--teal-border);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--teal-dark);
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  .ai-section h2 {
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 16px;
+    color: var(--teal-deep);
+  }
+  .ai-section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--teal-dark);
+    margin: 20px 0 8px;
+    border-bottom: 2px solid var(--teal-border);
+    padding-bottom: 6px;
+  }
+  .ai-section h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 12px 0 6px;
+  }
+  .ai-section p {
+    font-size: 12.5px;
+    line-height: 1.9;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .ai-section ul, .ai-section ol {
+    padding-left: 18px;
+    margin-bottom: 12px;
+    color: var(--text);
+    font-size: 12.5px;
+    line-height: 1.9;
+  }
+  .ai-section strong { color: var(--teal-deep); }
+  .summary-3col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .summary-col {
+    background: var(--teal-light);
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid var(--teal-border);
+  }
+  .summary-col h4 {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--teal-dark);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .summary-col ul {
+    list-style: none;
+    font-size: 12px;
+    color: var(--text);
+    padding-left: 0;
+  }
+  .summary-col ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--teal-border);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .summary-col ul li::before {
+    content: '▸';
+    color: var(--teal);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ===== ISSUE CARDS ===== */
+  .issue-card {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent2);
+  }
+  .issue-card.p1 { border-left-color: var(--danger); }
+  .issue-card.p2 { border-left-color: var(--warning); }
+  .issue-card.p3 { border-left-color: var(--teal); }
+  .issue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .issue-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .priority-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .priority-badge.p1 { background: #fde8ea; color: var(--danger); border: 1px solid #fca5a5; }
+  .priority-badge.p2 { background: #fef3c7; color: var(--warning); border: 1px solid #fcd34d; }
+  .priority-badge.p3 { background: var(--teal-light); color: var(--teal-dark); border: 1px solid var(--teal-border); }
+
+  .metric-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .metric-chip {
+    background: var(--teal-light);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--teal-dark);
+    border: 1px solid var(--teal-border);
+  }
+
+  /* ===== RISK TABLE (AI分析内テーブル) ===== */
+  .risk-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  .risk-table th {
+    background: var(--teal-deep);
+    color: #ffffff;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 11px;
+  }
+  .risk-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .risk-table tr:nth-child(even) td { background: var(--teal-light); }
+
+  /* ===== ACTION PLAN ===== */
+  .action-plan {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .action-item {
+    background: var(--teal-light);
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid var(--teal-border);
+  }
+  .action-timing {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--teal-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .action-item h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin-bottom: 8px;
+  }
+  .action-item ul {
+    list-style: none;
+    font-size: 11px;
+    color: var(--text);
+    padding-left: 0;
+  }
+  .action-item ul li {
+    padding: 2px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .action-item ul li::before {
+    content: '→';
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+
+  /* ===== FOOTER ===== */
+  .report-footer {
+    background: var(--teal-deep);
+    color: rgba(255,255,255,0.85);
+    text-align: center;
+    padding: 18px;
+    font-size: 11px;
+    margin-top: 20px;
+  }
+  .report-footer strong { color: #ffffff; }
+
+  /* ===== CHART CONTAINERS ===== */
+  .chart-wrap {
+    position: relative;
+    height: 220px;
+    width: 100%;
+  }
+
+  /* ===== CONCERN BARS ===== */
+  .concern-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .concern-label { width: 110px; flex-shrink: 0; font-size: 12px; font-weight: 500; }
+  .concern-track { flex: 1; height: 24px; background: var(--border); border-radius: 4px; overflow: hidden; position: relative; }
+  .concern-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .concern-count { width: 50px; text-align: right; font-size: 11px; color: var(--text-light); font-weight: 700; }
+
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  @media print {
+    /* 印刷不要UI非表示 */
+    .no-print-hide { display: none !important; }
+    #aiInitPrompt { display: none !important; }
+    #aiRunBtn { display: none !important; }
+    [onclick="resetAI()"] { display: none !important; }
+    button { display: none !important; }
+    input { border: none !important; background: transparent !important; }
+
+    /* 基本リセット */
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: #fff !important; font-size: 11px; }
+    .main-content { max-width: 100%; padding: 12px; }
+
+    /* ヘッダー・KPIバーは1ページ目に固定 */
+    .report-header { padding: 12px 20px; }
+    .header-left h1 { font-size: 16px; }
+    .kpi-bar { break-inside: avoid; }
+
+    /* 改ページ禁止 */
+    .card { break-inside: avoid; page-break-inside: avoid; margin-bottom: 10px; box-shadow: none; border: 1px solid #D4E2E1; }
+    .ai-section { break-inside: avoid; page-break-inside: avoid; box-shadow: none; }
+    .risk-circles { break-inside: avoid; }
+    .score-grid { break-inside: avoid; }
+    .section-title { break-after: avoid; page-break-after: avoid; margin-top: 16px; }
+
+    /* グリッドを1列化（印刷時の横はみ出し防止） */
+    .score-grid { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .card-grid-2 { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .risk-circles { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+    /* グラフは高さを抑えて確実に収める */
+    .chart-wrap { height: 160px !important; }
+    .chart-wrap canvas { max-height: 160px !important; }
+    #correspondenceChart { max-height: 200px !important; }
+    [style*="height:320px"] { height: 200px !important; }
+
+    /* 分布バーのバックグラウンド印刷保証 */
+    .dist-fill { -webkit-print-color-adjust: exact !important; }
+    .concern-fill { -webkit-print-color-adjust: exact !important; }
+    .score-bar-fill { -webkit-print-color-adjust: exact !important; }
+
+    /* KPIバー・ヘッダー背景印刷保証 */
+    .kpi-bar { -webkit-print-color-adjust: exact !important; }
+    .kpi-item { padding: 8px 12px; }
+    .kpi-value { font-size: 22px; }
+
+    /* フッター */
+    .report-footer { margin-top: 10px; padding: 10px; font-size: 10px; }
+
+    /* AIタイムスタンプ */
+    #aiTimestamp { font-size: 10px; }
+
+    /* テーブルの見切れ防止 */
+    table { break-inside: avoid; page-break-inside: avoid; }
+    td, th { padding: 5px 8px; font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="report-header">
+  <div class="header-top">
+    <div class="header-left">
+      <div class="company-placeholder" id="companyName">【企業名を入力してください】</div>
+      <h1>月次組織分析レポート</h1>
+      <div class="header-meta" id="headerMeta">実施期間：― ／ 担当：岩下</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+      <div class="report-badge">月次組織分析レポート</div>
+      <div class="logo-area">
+        <img src="logo.linkpranity.png" alt="LINKPRANITY" onerror="this.style.display='none'">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CLIENT INFO PANEL ===== -->
+<div style="background:#fff;border-bottom:1px solid var(--border);padding:14px 40px;" class="no-print-hide">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="font-size:11px;font-weight:700;color:var(--teal-dark);margin-bottom:10px;letter-spacing:0.05em;">📋 クライアント情報（AI分析に反映されます）</div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 3fr auto;gap:12px;align-items:end;">
+      <div>
+        <label style="font-size:11px;color:var(--text-light);font-weight:700;display:block;margin-bottom:4px;">クライアント名 *</label>
+        <input type="text" id="inputCompanyName" placeholder="例：株式会社〇〇" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;font-family:inherit;color:var(--text);background:#fff;outline:none;" oninput="syncClientInfo()">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--text-light);font-weight:700;display:block;margin-bottom:4px;">従業員数 *</label>
+        <input type="number" id="inputEmployeeCount" placeholder="例：30" min="1" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;font-family:inherit;color:var(--text);background:#fff;outline:none;" oninput="syncClientInfo()">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--text-light);font-weight:700;display:block;margin-bottom:4px;">事業内容（業界・業種・サービス内容など）</label>
+        <input type="text" id="inputBusiness" placeholder="例：飲食業（居酒屋チェーン）/ 介護施設の運営 / 建設・土木工事業" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;font-family:inherit;color:var(--text);background:#fff;outline:none;" oninput="syncClientInfo()">
+      </div>
+      <div>
+        <button onclick="saveClientInfo()" style="background:var(--teal);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">保存</button>
+      </div>
+    </div>
+    <div id="clientInfoSaved" style="font-size:11px;color:var(--success);margin-top:6px;display:none;">✅ 保存しました</div>
+  </div>
+</div>
+
+<!-- KPI BAR -->
+<div class="kpi-bar">
+  <div class="kpi-item">
+    <div class="kpi-value" id="kpi-total">6</div>
+    <div class="kpi-label">総回答数</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-value" id="kpi-rate">20%</div>
+    <div class="kpi-label">回答率</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-value danger" id="kpi-harassment">2</div>
+    <div class="kpi-label">ハラスメント報告</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-value warning" id="kpi-resign">3</div>
+    <div class="kpi-label">離職懸念者</div>
+  </div>
+</div>
+
+<div class="main-content">
+
+  <!-- ===== SCORE SECTION ===== -->
+  <div class="section-title">組織コンディションスコア</div>
+  <div class="score-grid">
+    <div class="score-card danger" id="scoreRelations">
+      <div class="score-label">人間関係</div>
+      <div class="score-number danger">25</div>
+      <div style="font-size:10px;color:var(--text-light);">/100</div>
+      <div class="score-badge danger">要対応</div>
+      <div class="score-bar-track"><div class="score-bar-fill" style="width:25%;background:var(--danger);"></div></div>
+    </div>
+    <div class="score-card success" id="scoreEvaluation">
+      <div class="score-label">評価制度</div>
+      <div class="score-number success">75</div>
+      <div style="font-size:10px;color:var(--text-light);">/100</div>
+      <div class="score-badge success">良好</div>
+      <div class="score-bar-track"><div class="score-bar-fill" style="width:75%;background:var(--success);"></div></div>
+    </div>
+    <div class="score-card warning" id="scoreWorkload">
+      <div class="score-label">業務量</div>
+      <div class="score-number warning">58</div>
+      <div style="font-size:10px;color:var(--text-light);">/100</div>
+      <div class="score-badge warning">注意</div>
+      <div class="score-bar-track"><div class="score-bar-fill" style="width:58%;background:var(--warning);"></div></div>
+    </div>
+    <div class="score-card warning" id="scoreStay">
+      <div class="score-label">継続就業</div>
+      <div class="score-number warning">50</div>
+      <div style="font-size:10px;color:var(--text-light);">/100</div>
+      <div class="score-badge warning">注意</div>
+      <div class="score-bar-track"><div class="score-bar-fill" style="width:50%;background:var(--warning);"></div></div>
+    </div>
+    <div class="score-card warning" id="scoreSpeak">
+      <div class="score-label">発言しやすさ</div>
+      <div class="score-number warning">50</div>
+      <div style="font-size:10px;color:var(--text-light);">/100</div>
+      <div class="score-badge warning">注意</div>
+      <div class="score-bar-track"><div class="score-bar-fill" style="width:50%;background:var(--warning);"></div></div>
+    </div>
+  </div>
+
+  <!-- ===== DISTRIBUTION ===== -->
+  <div class="section-title">各項目 回答分布</div>
+  <div class="card-grid-2">
+    <div class="card">
+      <div class="section-subtitle">人間関係（Q3） <span style="color:var(--danger);font-size:18px;font-weight:900;margin-left:auto;">25 pt</span></div>
+      <div class="dist-item"><div class="dist-label">とても満足している</div><div class="dist-track"><div class="dist-fill dist-pos" style="width:0%">—</div></div><div class="dist-count">0名 (0%)</div></div>
+      <div class="dist-item"><div class="dist-label">やや満足している</div><div class="dist-track"><div class="dist-fill dist-pos" style="width:17%">1名</div></div><div class="dist-count">1名 (17%)</div></div>
+      <div class="dist-item"><div class="dist-label">どちらでもない</div><div class="dist-track"><div class="dist-fill dist-neu" style="width:17%">1名</div></div><div class="dist-count">1名 (17%)</div></div>
+      <div class="dist-item"><div class="dist-label">やや不満</div><div class="dist-track"><div class="dist-fill dist-neg" style="width:67%">4名</div></div><div class="dist-count">4名 (67%)</div></div>
+      <div class="dist-item"><div class="dist-label">とても不満</div><div class="dist-track"><div class="dist-fill dist-very-neg" style="width:0%">—</div></div><div class="dist-count">0名 (0%)</div></div>
+    </div>
+    <div class="card">
+      <div class="section-subtitle">評価制度（Q4） <span style="color:var(--success);font-size:18px;font-weight:900;margin-left:auto;">75 pt</span></div>
+      <div class="dist-item"><div class="dist-label">とても満足している</div><div class="dist-track"><div class="dist-fill dist-pos" style="width:0%">—</div></div><div class="dist-count">0名 (0%)</div></div>
+      <div class="dist-item"><div class="dist-label">やや満足している</div><div class="dist-track"><div class="dist-fill dist-pos" style="width:67%">4名</div></div><div class="dist-count">4名 (67%)</div></div>
+      <div class="dist-item"><div class="dist-label">どちらでもない</div><div class="dist-track"><div class="dist-fill dist-neu" style="width:17%">1名</div></div><div class="dist-count">1名 (17%)</div></div>
+      <div class="dist-item"><div class="dist-label">やや不満</div><div class="dist-track"><div class="dist-fill dist-neg" style="width:17%">1名</div></div><div class="dist-count">1名 (17%)</div></div>
+      <div class="dist-item"><div class="dist-label">とても不満</div><div class="dist-track"><div class="dist-fill dist-very-neg" style="width:0%">—</div></div><div class="dist-count">0名 (0%)</div></div>
+    </div>
+    <div class="card">
+      <div class="section-subtitle">業務量（Q5） <span style="color:var(--warning);font-size:18px;font-weight:900;margin-left:auto;">58 pt</span></div>
+      <div class="dist-item"><div class="dist-label">とても満足している</div><div class="dist-track"><div class="dist-fill dist-pos" style="width:17%">1名</div></div><div class="dist-count">1名 (17%)</div></div>
+      <div class="dist-item"><div class="dist-label">やや満足している</div><div class="dist-track"><div class="dist-fill dist-pos" style="width:33%">2名</div></div><div class="dist-count">2名 (33%)</div></div>
+      <div class="dist-item"><div class="dist-label">どちらでもない</div><div class="dist-track"><div class="dist-fill dist-neu" style="width:17%">1名</div></div><div class="dist-count">1名 (17%)</div></div>
+      <div class="dist-item"><div class="dist-label">やや不満</div><div class="dist-track"><div class="dist-fill dist-neg" style="width:17%">1名</div></div><div class="dist-count">1名 (17%)</div></div>
+      <div class="dist-item"><div class="dist-label">とても不満</div><div class="dist-track"><div class="dist-fill dist-very-neg" style="width:17%">1名</div></div><div class="dist-count">1名 (17%)</div></div>
+    </div>
+    <div class="card">
+      <div class="section-subtitle">継続就業意向（Q6） <span style="color:var(--warning);font-size:18px;font-weight:900;margin-left:auto;">75 pt</span></div>
+      <div class="dist-item"><div class="dist-label">とてもそう思う</div><div class="dist-track"><div class="dist-fill dist-pos" style="width:17%">1名</div></div><div class="dist-count">1名 (17%)</div></div>
+      <div class="dist-item"><div class="dist-label">ややそう思う</div><div class="dist-track"><div class="dist-fill dist-pos" style="width:33%">2名</div></div><div class="dist-count">2名 (33%)</div></div>
+      <div class="dist-item"><div class="dist-label">あまり思わない</div><div class="dist-track"><div class="dist-fill dist-neg" style="width:50%">3名</div></div><div class="dist-count">3名 (50%)</div></div>
+      <div class="dist-item"><div class="dist-label">全く思わない</div><div class="dist-track"><div class="dist-fill dist-very-neg" style="width:0%">—</div></div><div class="dist-count">0名 (0%)</div></div>
+    </div>
+  </div>
+
+  <!-- ===== RISK ANALYSIS ===== -->
+  <div class="section-title">リスク分析</div>
+  <div class="risk-circles">
+    <div class="risk-circle-card">
+      <div class="circle-container">
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#D4E2E1" stroke-width="8"/>
+          <circle id="arcResign" cx="40" cy="40" r="34" fill="none" stroke="#DC2626" stroke-width="8"
+            stroke-dasharray="106.8 213.6" stroke-linecap="round"/>
+        </svg>
+        <div class="circle-text" style="color:var(--danger);" id="riskResignPct">50%</div>
+      </div>
+      <div class="risk-count" style="color:var(--danger);" id="riskResignCount">3名</div>
+      <div class="risk-desc">離職真剣検討</div>
+    </div>
+    <div class="risk-circle-card">
+      <div class="circle-container">
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#D4E2E1" stroke-width="8"/>
+          <circle id="arcHarass" cx="40" cy="40" r="34" fill="none" stroke="#D97706" stroke-width="8"
+            stroke-dasharray="71.2 213.6" stroke-linecap="round"/>
+        </svg>
+        <div class="circle-text" style="color:var(--warning);" id="riskHarassPct">33%</div>
+      </div>
+      <div class="risk-count" style="color:var(--warning);" id="riskHarassCount">2名</div>
+      <div class="risk-desc">ハラスメント報告</div>
+    </div>
+    <div class="risk-circle-card">
+      <div class="circle-container">
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#D4E2E1" stroke-width="8"/>
+          <circle id="arcSpeak" cx="40" cy="40" r="34" fill="none" stroke="#0D9E8E" stroke-width="8"
+            stroke-dasharray="142.4 213.6" stroke-linecap="round"/>
+        </svg>
+        <div class="circle-text" style="color:var(--teal-dark);" id="riskSpeakPct">67%</div>
+      </div>
+      <div class="risk-count" style="color:var(--teal-dark);" id="riskSpeakCount">4名</div>
+      <div class="risk-desc">言いづらさあり</div>
+    </div>
+  </div>
+
+  <!-- Concern TOP5 — dynamically rendered -->
+  <div class="card">
+    <div class="section-subtitle">不安・課題 TOP5</div>
+    <div id="concernsList"></div>
+  </div>
+
+  <!-- ===== CROSS ANALYSIS ===== -->
+  <div class="section-title">属性別クロス分析</div>
+  <div class="card-grid-2">
+    <div class="card">
+      <div class="section-subtitle">勤続年数別</div>
+      <table>
+        <thead><tr><th>属性</th><th>人数</th><th>人間関係</th><th>業務量</th><th>継続意向</th></tr></thead>
+        <tbody id="tenureTableBody"></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="section-subtitle">所属区分別</div>
+      <table>
+        <thead><tr><th>属性</th><th>人数</th><th>人間関係</th><th>業務量</th><th>継続意向</th></tr></thead>
+        <tbody id="roleTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== CHART SECTION ===== -->
+  <div class="section-title">スコアビジュアル分析</div>
+  <div class="card-grid-2">
+    <div class="card">
+      <div class="section-subtitle">組織コンディション レーダーチャート</div>
+      <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="section-subtitle">属性別スコア比較（勤続年数・役職）</div>
+      <div class="chart-wrap"><canvas id="barChart"></canvas></div>
+    </div>
+  </div>
+  <!-- コレスポンデンス分析 -->
+  <div class="card">
+    <div class="section-subtitle">不安・課題 × 属性別 コレスポンデンス分析</div>
+    <div style="font-size:11px;color:var(--text-light);margin-bottom:10px;">
+      バブルの大きさ＝回答人数、位置＝課題の集中度・属性との対応関係を示す。右上ほど「高リスク・高集中」
+    </div>
+    <div style="position:relative;height:320px;"><canvas id="correspondenceChart"></canvas></div>
+  </div>
+
+  <!-- ===== VOICE SECTION ===== -->
+  <div class="section-title">従業員の声</div>
+  <div class="card-grid-2">
+    <div class="card">
+      <div class="section-subtitle">💬 一般コメント（<span id="voicesFreeCount">3</span>件）</div>
+      <div id="voicesFree">
+        <div class="voice-card general"><span class="voice-icon">💬</span>上司が話を聞いてくれない</div>
+        <div class="voice-card general"><span class="voice-icon">💬</span>評価基準を明確にして、業務が終わり次第帰宅する流れを作ってほしい</div>
+        <div class="voice-card general"><span class="voice-icon">💬</span>いつも残業になるのでならないように調整してほしい</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-subtitle" style="color:var(--danger);">⚠️ ハラスメント・懸念（<span id="voicesHarassCount">4</span>件）</div>
+      <div id="voicesHarass">
+        <div class="voice-card harassment"><span class="voice-icon">⚠️</span>岩下店長がハラスメントしてきます。</div>
+        <div class="voice-card harassment"><span class="voice-icon">⚠️</span>同僚がお店の売上を抜いているのを見かけたことがある</div>
+        <div class="voice-card harassment"><span class="voice-icon">⚠️</span>岩下店長が女の子を席につける時に二の腕を触っているのを目撃しました。</div>
+        <div class="voice-card harassment"><span class="voice-icon">⚠️</span>冗談を過ぎた発言をしている人がいる</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== AI ANALYSIS ===== -->
+  <div class="ai-section" id="aiAnalysisSection">
+    <div class="ai-badge">✦ Claude AI powered — 組織コンサルティングレポート</div>
+    <h2>✨ AI分析・課題抽出・改善提案</h2>
+
+    <div id="aiInitPrompt" style="text-align:center;padding:32px 0 24px;">
+      <div style="font-size:13px;color:var(--text-light);margin-bottom:6px;">クライアント情報（名称・事業内容）を入力後、ボタンを押してAI分析を開始してください。</div>
+      <div style="font-size:11px;color:var(--text-light);margin-bottom:20px;">※ 1回の分析につきAPIクレジットを消費します。内容確認後に実行してください。</div>
+      <button id="aiRunBtn" onclick="runAIAnalysis()" style="background:var(--teal);color:#fff;border:none;border-radius:10px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;transition:opacity 0.2s;">
+        ✦ AI分析を実行する
+      </button>
+    </div>
+
+    <div id="aiLoading" style="display:none;text-align:center;padding:40px 0;">
+      <div style="font-size:28px;margin-bottom:10px;animation:spin 1.5s linear infinite;display:inline-block;">⟳</div>
+      <div style="font-size:13px;color:var(--text-light);">Claude AIが分析中です。しばらくお待ちください...</div>
+    </div>
+
+    <div id="aiContent" style="display:none;"></div>
+  </div>
+
+  <div style="text-align:center;font-size:11px;color:var(--text-light);margin-bottom:8px;" id="aiTimestamp"></div>
+
+</div><!-- /main-content -->
+
+<!-- FOOTER -->
+<div class="report-footer">
+  本レポートは<strong>株式会社リンクプラニティ</strong>が提供する月次アンケートシステムにより生成されました。<br>
+  担当：岩下 ／ TEL：03-5931-3147 ／ E-mail：iwashita@linkpranity.com
+</div>
+
+<script>
+// ============================================================
+//  データ取得ユーティリティ
+//  index.html が localStorage に保存するキー: 'surveyResponses'
+//  各レコード: { answers: { tenure, role, relations, evaluation,
+//    workload, stay, speak_up, concerns:[], comments, harassment,
+//    incident, consult } }
+// ============================================================
+const STORAGE_KEY = 'surveyResponses';
+
+function getResponses() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+}
+
+// スコア計算（5択: 満足系）
+// 1=とても満足 2=やや満足 3=どちら 4=やや不満 5=とても不満
+const SCORE_MAP_SAT = { 0:100, 1:75, 2:50, 3:25, 4:0 };
+// 継続意向: 1=とても思う 2=やや思う 3=あまり思わない 4=全く思わない
+const SCORE_MAP_STAY = { 0:100, 1:75, 2:25, 3:0 };
+
+function scoreRelations(r) {
+  const v = ['とても満足している','やや満足している','どちらでもない','やや不満','とても不満']
+    .indexOf(r.answers?.relations);
+  return v < 0 ? null : SCORE_MAP_SAT[v];
+}
+function scoreEvaluation(r) {
+  const v = ['とても満足している','やや満足している','どちらでもない','やや不満','とても不満']
+    .indexOf(r.answers?.evaluation);
+  return v < 0 ? null : SCORE_MAP_SAT[v];
+}
+function scoreWorkload(r) {
+  const v = ['とても満足している','やや満足している','どちらでもない','やや不満','とても不満']
+    .indexOf(r.answers?.workload);
+  return v < 0 ? null : SCORE_MAP_SAT[v];
+}
+function scoreStay(r) {
+  const v = ['とてもそう思う','ややそう思う','あまり思わない','全く思わない']
+    .indexOf(r.answers?.stay);
+  return v < 0 ? null : SCORE_MAP_STAY[v];
+}
+function avgScore(arr) {
+  const valid = arr.filter(v => v !== null);
+  return valid.length ? Math.round(valid.reduce((a,b)=>a+b,0)/valid.length) : null;
+}
+function scoreLabel(s) {
+  if (s === null) return { cls:'warning', label:'データなし' };
+  if (s >= 70) return { cls:'success', label:'良好' };
+  if (s >= 50) return { cls:'warning', label:'注意' };
+  return { cls:'danger', label:'要対応' };
+}
+function tagHtml(score) {
+  const s = scoreLabel(score);
+  const v = score !== null ? score : '—';
+  return `<span class="tag ${s.cls}">${s.label} ${v}</span>`;
+}
+
+// ============================================================
+//  フォールバック固定データ（回答0件時に表示）
+// ============================================================
+const FALLBACK = {
+  total: 6, responseRate: 20,
+  scores: { relations:25, evaluation:75, workload:58, stay:50, speak:50 },
+  risks: { resign:{pct:50,count:3}, harassment:{pct:33,count:2}, speak:{pct:67,count:4} },
+  concerns: [
+    {name:'評価制度',count:4,pct:67},
+    {name:'ハラスメント',count:4,pct:67},
+    {name:'給与・待遇',count:3,pct:50},
+    {name:'その他',count:3,pct:50},
+    {name:'情報共有不足',count:2,pct:33},
+  ],
+  tenure: [
+    { group:'1〜3年', count:5, relations:30, workload:50, stay:40 },
+    { group:'10年以上', count:1, relations:0, workload:100, stay:100 },
+  ],
+  role: [
+    { group:'管理職（部長・課長）', count:1, relations:0, workload:100, stay:0 },
+    { group:'リーダー・主任', count:2, relations:25, workload:25, stay:100 },
+    { group:'パート・アルバイト', count:1, relations:0, workload:100, stay:0 },
+  ],
+  voices: {
+    free:['上司が話を聞いてくれない','評価基準を明確にして、業務が終わり次第帰宅する流れを作ってほしい','いつも残業になるのでならないように調整してほしい'],
+    harassment:['岩下店長がハラスメントしてきます。','同僚がお店の売上を抜いているのを見かけたことがある','岩下店長が女の子を席につける時に二の腕を触っているのを目撃しました。','冗談を過ぎた発言をしている人がいる'],
+  }
+};
+
+// ============================================================
+//  メインレンダリング
+// ============================================================
+function buildReportData() {
+  const R = getResponses();
+  if (!R.length) return { ...FALLBACK, useFallback: true };
+
+  const total = R.length;
+
+  // スコア
+  const relScores  = R.map(scoreRelations);
+  const evalScores = R.map(scoreEvaluation);
+  const wlScores   = R.map(scoreWorkload);
+  const stayScores = R.map(scoreStay);
+
+  // speak: 言いづらいことがある → count
+  const speakBadCount = R.filter(r => ['ある','少しある'].includes(r.answers?.speak_up)).length;
+  const speakScore = Math.round((1 - speakBadCount/total)*100);
+
+  // resign: あまり思わない + 全く思わない
+  const resignCount = R.filter(r => ['あまり思わない','全く思わない'].includes(r.answers?.stay)).length;
+  // harassment
+  const harassCount = R.filter(r => r.answers?.harassment && r.answers.harassment.trim()).length;
+  const incidentCount = R.filter(r => r.answers?.incident && r.answers.incident.trim()).length;
+  const totalHarass = harassCount + incidentCount;
+
+  // concerns
+  const concernMap = {};
+  R.forEach(r => {
+    (r.answers?.concerns || []).forEach(c => {
+      if (c && c !== '特になし') concernMap[c] = (concernMap[c]||0)+1;
+    });
+  });
+  const concerns = Object.entries(concernMap)
+    .sort((a,b)=>b[1]-a[1]).slice(0,5)
+    .map(([name,count])=>({name,count,pct:Math.round(count/total*100)}));
+
+  // cross: tenure
+  const tenureGroups = {};
+  R.forEach((r,i) => {
+    const key = r.answers?.tenure || '不明';
+    if (!tenureGroups[key]) tenureGroups[key] = {count:0,rel:[],wl:[],stay:[]};
+    tenureGroups[key].count++;
+    if (relScores[i]!==null) tenureGroups[key].rel.push(relScores[i]);
+    if (wlScores[i]!==null) tenureGroups[key].wl.push(wlScores[i]);
+    if (stayScores[i]!==null) tenureGroups[key].stay.push(stayScores[i]);
+  });
+  const tenure = Object.entries(tenureGroups).map(([group,d])=>({
+    group, count:d.count,
+    relations:avgScore(d.rel), workload:avgScore(d.wl), stay:avgScore(d.stay)
+  }));
+
+  // cross: role
+  const roleGroups = {};
+  R.forEach((r,i) => {
+    const key = r.answers?.role || '不明';
+    if (!roleGroups[key]) roleGroups[key] = {count:0,rel:[],wl:[],stay:[]};
+    roleGroups[key].count++;
+    if (relScores[i]!==null) roleGroups[key].rel.push(relScores[i]);
+    if (wlScores[i]!==null) roleGroups[key].wl.push(wlScores[i]);
+    if (stayScores[i]!==null) roleGroups[key].stay.push(stayScores[i]);
+  });
+  const role = Object.entries(roleGroups).map(([group,d])=>({
+    group, count:d.count,
+    relations:avgScore(d.rel), workload:avgScore(d.wl), stay:avgScore(d.stay)
+  }));
+
+  // voices
+  const free = R.map(r=>r.answers?.comments).filter(Boolean);
+  const harassment = R.map(r=>r.answers?.harassment).filter(Boolean)
+    .concat(R.map(r=>r.answers?.incident).filter(Boolean));
+
+  return {
+    total, responseRate: null, useFallback: false,
+    scores: {
+      relations: avgScore(relScores) ?? 0,
+      evaluation: avgScore(evalScores) ?? 0,
+      workload: avgScore(wlScores) ?? 0,
+      stay: avgScore(stayScores) ?? 0,
+      speak: speakScore
+    },
+    risks: {
+      resign: { pct:Math.round(resignCount/total*100), count:resignCount },
+      harassment: { pct:Math.round(totalHarass/total*100), count:totalHarass },
+      speak: { pct:Math.round(speakBadCount/total*100), count:speakBadCount }
+    },
+    concerns, tenure, role, voices: { free, harassment }
+  };
+}
+
+// ============================================================
+//  DOM更新
+// ============================================================
+function renderScores(d) {
+  const s = d.scores;
+  const items = [
+    {id:'scoreRelations', score:s.relations},
+    {id:'scoreEvaluation', score:s.evaluation},
+    {id:'scoreWorkload', score:s.workload},
+    {id:'scoreStay', score:s.stay},
+    {id:'scoreSpeak', score:s.speak},
+  ];
+  items.forEach(({id,score}) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const {cls, label} = scoreLabel(score);
+    el.querySelector('.score-number').textContent = score;
+    el.querySelector('.score-number').className = `score-number ${cls}`;
+    el.querySelector('.score-badge').textContent = label;
+    el.querySelector('.score-badge').className = `score-badge ${cls}`;
+    el.querySelector('.score-bar-fill').style.width = score + '%';
+    el.className = `score-card ${cls}`;
+    const colors = {danger:'var(--danger)',warning:'var(--warning)',success:'var(--success)'};
+    el.querySelector('.score-bar-fill').style.background = colors[cls];
+  });
+}
+
+function renderRisks(d) {
+  const r = d.risks;
+  // Circles — update text only (SVG stroke stays as-is for simplicity)
+  const circleDefs = [
+    { textId:'riskResignPct', countId:'riskResignCount', data: r.resign },
+    { textId:'riskHarassPct', countId:'riskHarassCount', data: r.harassment },
+    { textId:'riskSpeakPct',  countId:'riskSpeakCount',  data: r.speak },
+  ];
+  circleDefs.forEach(({textId,countId,data}) => {
+    const t = document.getElementById(textId);
+    const c = document.getElementById(countId);
+    if (t) t.textContent = data.pct + '%';
+    if (c) c.textContent = data.count + '名';
+  });
+  // SVG arcs
+  const circumference = 2 * Math.PI * 34; // ~213.6
+  [
+    { id:'arcResign', pct: r.resign.pct },
+    { id:'arcHarass', pct: r.harassment.pct },
+    { id:'arcSpeak',  pct: r.speak.pct },
+  ].forEach(({id,pct}) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const len = (pct/100)*circumference;
+      el.setAttribute('stroke-dasharray', `${len.toFixed(1)} ${circumference.toFixed(1)}`);
+    }
+  });
+}
+
+function renderConcerns(d, total) {
+  const el = document.getElementById('concernsList');
+  if (!el) return;
+  if (!d.concerns.length) {
+    el.innerHTML = '<div style="color:var(--text-light);font-size:12px;text-align:center;padding:16px;">回答データなし</div>';
+    return;
+  }
+  const colors = [
+    'linear-gradient(90deg,#DC2626,#9B1C1C)',
+    'linear-gradient(90deg,#DC2626,#9B1C1C)',
+    'linear-gradient(90deg,#D97706,#B45309)',
+    'linear-gradient(90deg,#D97706,#B45309)',
+    'linear-gradient(90deg,#0D9E8E,#0F4C5C)',
+  ];
+  el.innerHTML = d.concerns.map((c,i)=>`
+    <div class="concern-item">
+      <div class="concern-label">${c.name}</div>
+      <div class="concern-track">
+        <div class="concern-fill" style="width:${c.pct}%;background:${colors[i]||colors[4]};">${c.pct}%</div>
+      </div>
+      <div class="concern-count">${c.count}名 (${c.pct}%)</div>
+    </div>`).join('');
+}
+
+function renderCrossTable(tbodyId, rows) {
+  const el = document.getElementById(tbodyId);
+  if (!el) return;
+  el.innerHTML = rows.map(r=>`
+    <tr>
+      <td>${r.group}</td><td>${r.count}名</td>
+      <td>${tagHtml(r.relations)}</td>
+      <td>${tagHtml(r.workload)}</td>
+      <td>${tagHtml(r.stay)}</td>
+    </tr>`).join('');
+}
+
+function renderVoices(d) {
+  const freeEl = document.getElementById('voicesFree');
+  const harassEl = document.getElementById('voicesHarass');
+  const freeCntEl = document.getElementById('voicesFreeCount');
+  const harassCntEl = document.getElementById('voicesHarassCount');
+
+  if (freeCntEl) freeCntEl.textContent = d.voices.free.length;
+  if (harassCntEl) harassCntEl.textContent = d.voices.harassment.length;
+
+  if (freeEl) freeEl.innerHTML = d.voices.free.length
+    ? d.voices.free.map(v=>`<div class="voice-card general"><span class="voice-icon">💬</span>${v}</div>`).join('')
+    : '<div class="voice-card" style="color:var(--text-light);">なし</div>';
+
+  if (harassEl) harassEl.innerHTML = d.voices.harassment.length
+    ? d.voices.harassment.map(v=>`<div class="voice-card harassment"><span class="voice-icon">⚠️</span>${v}</div>`).join('')
+    : '<div class="voice-card" style="color:var(--text-light);">報告なし</div>';
+}
+
+// ============================================================
+//  Chart.js グラフ生成
+// ============================================================
+let radarChartInst, barChartInst, corrChartInst;
+
+function renderCharts(d) {
+  const s = d.scores;
+
+  // ① レーダーチャート
+  const radarCtx = document.getElementById('radarChart');
+  if (radarCtx) {
+    if (radarChartInst) radarChartInst.destroy();
+    radarChartInst = new Chart(radarCtx, {
+      type: 'radar',
+      data: {
+        labels: ['人間関係','評価制度','業務量','継続就業','発言しやすさ'],
+        datasets: [{
+          label: '今月スコア',
+          data: [s.relations, s.evaluation, s.workload, s.stay, s.speak],
+          fill: true,
+          backgroundColor: 'rgba(0,201,167,0.15)',
+          borderColor: '#0D9E8E',
+          pointBackgroundColor: '#0D9E8E',
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          r: {
+            min:0, max:100,
+            ticks:{ stepSize:25, font:{size:10} },
+            pointLabels:{ font:{size:11, family:"'Noto Sans JP'"} },
+            grid:{ color:'rgba(0,0,0,0.07)' }
+          }
+        },
+        plugins: { legend:{ display:false } }
+      }
+    });
+  }
+
+  // ② 属性別スコア比較棒グラフ（勤続年数別）
+  const barCtx = document.getElementById('barChart');
+  if (barCtx) {
+    if (barChartInst) barChartInst.destroy();
+    const tenureLabels = d.tenure.map(t=>t.group + `（${t.count}名）`);
+    barChartInst = new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: tenureLabels,
+        datasets: [
+          { label:'人間関係', data: d.tenure.map(t=>t.relations), backgroundColor:'#DC2626bb', borderRadius:4 },
+          { label:'業務量',   data: d.tenure.map(t=>t.workload),  backgroundColor:'#D97706bb', borderRadius:4 },
+          { label:'継続意向', data: d.tenure.map(t=>t.stay),      backgroundColor:'#0D9E8Ebb', borderRadius:4 },
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        scales:{ y:{ min:0, max:100, ticks:{stepSize:25} } },
+        plugins:{
+          legend:{ position:'bottom', labels:{ font:{size:11, family:"'Noto Sans JP'"} } }
+        }
+      }
+    });
+  }
+
+  // ③ コレスポンデンス分析（バブルチャート）
+  //    X軸: 課題のリスク重みスコア（ハラスメント系>人間関係系>評価系>給与>その他）
+  //    Y軸: 回答率（全回答に対する割合）
+  //    バブルサイズ: 回答人数
+  const corrCtx = document.getElementById('correspondenceChart');
+  if (corrCtx) {
+    if (corrChartInst) corrChartInst.destroy();
+
+    // 課題ごとのリスク重み（X軸位置として使用）
+    const riskWeight = {
+      'ハラスメント': 95,
+      '人間関係': 80,
+      '情報共有不足': 65,
+      '業務量': 60,
+      '給与・待遇': 55,
+      '評価制度': 45,
+      'コミュニケーション': 70,
+      'その他': 30,
+    };
+
+    const bubbleData = d.concerns.map((c, i) => {
+      const xBase = riskWeight[c.name] || (40 - i*5);
+      // X軸: リスク重み + 少しランダム揺れで重なり防止
+      const x = Math.min(99, Math.max(5, xBase + (i % 2 === 0 ? 2 : -2)));
+      const y = c.pct; // Y軸: 回答率%
+      return { x, y, r: Math.max(8, c.count * 7), label: c.name, count: c.count, pct: c.pct };
+    });
+
+    // 役職別データもバブルで追加（別色）
+    const roleData = d.role.map((r, i) => {
+      const concernScore = 100 - ((r.relations||50) + (r.workload||50) + (r.stay||50)) / 3;
+      const x = Math.min(95, Math.max(5, concernScore + i*3));
+      const y = Math.round((1 - (r.relations||50)/100) * 100); // 不満率
+      return { x, y, r: Math.max(8, r.count * 9), label: r.group, count: r.count };
+    });
+
+    corrChartInst = new Chart(corrCtx, {
+      type: 'bubble',
+      data: {
+        datasets: [
+          {
+            label: '不安・課題カテゴリ',
+            data: bubbleData,
+            backgroundColor: bubbleData.map(b =>
+              b.y >= 60 ? 'rgba(230,57,70,0.7)' : b.y >= 40 ? 'rgba(244,162,97,0.7)' : 'rgba(116,185,255,0.7)'
+            ),
+            borderColor: bubbleData.map(b =>
+              b.y >= 60 ? '#DC2626' : b.y >= 40 ? '#D97706' : '#0D9E8E'
+            ),
+            borderWidth: 2,
+          },
+          {
+            label: '役職グループ',
+            data: roleData,
+            backgroundColor: 'rgba(0,201,167,0.45)',
+            borderColor: '#0D9E8E',
+            borderWidth: 2,
+            borderDash: [4,4],
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          x: {
+            min: 0, max: 100,
+            title: { display:true, text:'リスク重み（右ほど高リスク）', font:{size:11} },
+            ticks:{ stepSize:20, callback: v => v+'pt' }
+          },
+          y: {
+            min: 0, max: 100,
+            title: { display:true, text:'回答率・集中度（%）', font:{size:11} },
+            ticks:{ callback: v => v+'%' }
+          }
+        },
+        plugins: {
+          legend: { position:'bottom', labels:{ font:{size:11, family:"'Noto Sans JP'"}, boxWidth:12 } },
+          tooltip: {
+            callbacks: {
+              label: ctx => {
+                const d = ctx.raw;
+                return `${d.label}：${d.pct || ''}%（${d.count}名）`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+}
+
+// ============================================================
+//  クライアント情報
+// ============================================================
+const META_KEY = 'reportMeta';
+
+function loadClientInfo() {
+  try {
+    const m = JSON.parse(localStorage.getItem(META_KEY) || '{}');
+    if (m.companyName) {
+      document.getElementById('inputCompanyName').value = m.companyName;
+      document.getElementById('companyName').textContent = m.companyName;
+    }
+    if (m.employeeCount) document.getElementById('inputEmployeeCount').value = m.employeeCount;
+    if (m.business) document.getElementById('inputBusiness').value = m.business;
+    if (m.period) document.getElementById('headerMeta').textContent = `実施期間：${m.period} ／ 担当：岩下`;
+    // 回答率を更新
+    updateResponseRate(m.employeeCount);
+  } catch {}
+}
+
+function syncClientInfo() {
+  const name = document.getElementById('inputCompanyName').value.trim();
+  if (name) document.getElementById('companyName').textContent = name;
+  const cnt = parseInt(document.getElementById('inputEmployeeCount').value);
+  updateResponseRate(cnt);
+}
+
+function updateResponseRate(employeeCount) {
+  const R = getResponses();
+  const total = R.length;
+  const cnt = parseInt(employeeCount) || 0;
+  const rate = cnt > 0 ? Math.round(total / cnt * 100) : null;
+  document.getElementById('kpi-rate').textContent = rate !== null ? rate + '%' : '—%';
+}
+
+function saveClientInfo() {
+  const meta = {
+    companyName: document.getElementById('inputCompanyName').value.trim(),
+    employeeCount: document.getElementById('inputEmployeeCount').value,
+    business: document.getElementById('inputBusiness').value.trim(),
+  };
+  localStorage.setItem(META_KEY, JSON.stringify(meta));
+  if (meta.companyName) document.getElementById('companyName').textContent = meta.companyName;
+  updateResponseRate(meta.employeeCount);
+  const saved = document.getElementById('clientInfoSaved');
+  saved.style.display = 'block';
+  setTimeout(() => saved.style.display = 'none', 2500);
+}
+
+function getClientMeta() {
+  try { return JSON.parse(localStorage.getItem(META_KEY) || '{}'); } catch { return {}; }
+}
+
+// ============================================================
+//  メイン初期化
+// ============================================================
+function initReport() {
+  const d = buildReportData();
+
+  document.getElementById('kpi-total').textContent = d.total;
+  document.getElementById('kpi-harassment').textContent = d.risks.harassment.count;
+  document.getElementById('kpi-resign').textContent = d.risks.resign.count;
+
+  renderScores(d);
+  renderRisks(d);
+  renderConcerns(d, d.total);
+  renderCrossTable('tenureTableBody', d.tenure);
+  renderCrossTable('roleTableBody', d.role);
+  renderVoices(d);
+  renderCharts(d);
+  loadClientInfo();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  initReport();
+  // AI分析は自動実行しない（ボタン押下時のみ）
+});
+
+// ============================================================
+//  APIキー管理（sessionStorage - ブラウザを閉じるまで保持）
+// ============================================================
+const API_KEY_STORAGE = 'lp_api_key';
+
+function getApiKey() {
+  return sessionStorage.getItem(API_KEY_STORAGE) || '';
+}
+function setApiKey(key) {
+  sessionStorage.setItem(API_KEY_STORAGE, key.trim());
+}
+function clearApiKey() {
+  sessionStorage.removeItem(API_KEY_STORAGE);
+}
+
+// APIキー入力モーダルを表示
+function promptApiKey() {
+  return new Promise((resolve) => {
+    // 既存モーダルがあれば削除
+    const existing = document.getElementById('apiKeyModal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'apiKeyModal';
+    modal.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,44,42,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;`;
+    modal.innerHTML = `
+      <div style="background:#fff;border-radius:16px;padding:32px 28px;max-width:440px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,0.18);">
+        <div style="font-size:11px;font-weight:700;color:var(--teal-dark);letter-spacing:0.05em;margin-bottom:8px;">✦ LINKPRANITY AI分析</div>
+        <div style="font-size:16px;font-weight:900;color:var(--teal-deep);margin-bottom:8px;">APIキーを入力してください</div>
+        <div style="font-size:12px;color:var(--text-light);margin-bottom:18px;line-height:1.7;">
+          Anthropic APIキー（<code style="background:var(--teal-light);padding:1px 5px;border-radius:4px;font-size:11px;">sk-ant-...</code>）を入力してください。<br>
+          キーはこのブラウザタブを閉じるまで保持されます。
+        </div>
+        <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." 
+          style="width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;font-family:inherit;color:var(--text);outline:none;margin-bottom:14px;"
+          onkeydown="if(event.key==='Enter')document.getElementById('apiKeyConfirmBtn').click()">
+        <div style="display:flex;gap:10px;">
+          <button id="apiKeyConfirmBtn" style="flex:1;background:var(--teal);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">
+            確認して分析開始
+          </button>
+          <button onclick="document.getElementById('apiKeyModal').remove()" 
+            style="background:var(--bg);color:var(--text-light);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;">
+            キャンセル
+          </button>
+        </div>
+        <div style="font-size:10px;color:var(--text-light);margin-top:12px;text-align:center;">
+          🔒 キーはブラウザのメモリにのみ保存され、外部に送信されません
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    document.getElementById('apiKeyInput').focus();
+
+    document.getElementById('apiKeyConfirmBtn').onclick = () => {
+      const key = document.getElementById('apiKeyInput').value.trim();
+      if (!key.startsWith('sk-ant-')) {
+        document.getElementById('apiKeyInput').style.borderColor = 'var(--danger)';
+        document.getElementById('apiKeyInput').placeholder = 'sk-ant- で始まるキーを入力してください';
+        return;
+      }
+      setApiKey(key);
+      modal.remove();
+      resolve(key);
+    };
+  });
+}
+
+// ============================================================
+//  AI分析（ボタン押下で実行）
+// ============================================================
+async function runAIAnalysis() {
+  // APIキー確認
+  let apiKey = getApiKey();
+  if (!apiKey) {
+    apiKey = await promptApiKey();
+    if (!apiKey) return; // キャンセル
+  }
+
+  const btn = document.getElementById('aiRunBtn');
+  const initPrompt = document.getElementById('aiInitPrompt');
+  const loading = document.getElementById('aiLoading');
+  const content = document.getElementById('aiContent');
+
+  // UI切り替え
+  initPrompt.style.display = 'none';
+  loading.style.display = 'block';
+  btn.disabled = true;
+
+  const d = buildReportData();
+  const meta = getClientMeta();
+
+  const surveyData = {
+    clientName: meta.companyName || '（未設定）',
+    employeeCount: meta.employeeCount || '（未設定）',
+    businessDescription: meta.business || '（未設定）',
+    totalRespondents: d.total,
+    responseRate: meta.employeeCount ? Math.round(d.total / parseInt(meta.employeeCount) * 100) + '%' : '不明',
+    scores: d.scores,
+    risks: d.risks,
+    topConcerns: d.concerns,
+    crossAnalysis: { byTenure: d.tenure, byRole: d.role },
+    voices: d.voices,
+  };
+
+  // 業界知見マッピング（事業内容キーワードで動的に追加）
+  const biz = (meta.business || '').toLowerCase();
+  let industryContext = '';
+  if (biz.includes('介護') || biz.includes('福祉') || biz.includes('ケア')) {
+    industryContext = `【介護・福祉業界の特性】厚生労働省の調査では介護職の年間離職率は約15%（全産業平均を上回る）。身体的・精神的負荷の高さ、低賃金、夜勤問題、利用者・家族からのクレームによるストレスが離職要因の上位。ハラスメントは利用者・家族からの「カスタマーハラスメント」が深刻。職員間の連携不足が事故リスクに直結するため、コミュニケーション環境が組織の安全性にも影響する。`;
+  } else if (biz.includes('建設') || biz.includes('土木') || biz.includes('工事')) {
+    industryContext = `【建設・土木業界の特性】国土交通省のデータでは建設業の離職率は約10%だが、若年層（29歳以下）は約17%と高水準。長時間労働・休日出勤が常態化しており、2024年の働き方改革対応が業界全体の課題。現場でのハラスメントは「職人気質」文化による上下関係の厳格さから表面化しにくい。下請け・多重請負構造による帰属意識の低さが離職リスクを高める。`;
+  } else if (biz.includes('飲食') || biz.includes('レストラン') || biz.includes('居酒屋') || biz.includes('カフェ')) {
+    industryContext = `【飲食業界の特性】厚生労働省調査では飲食業の年間離職率は約30%（全産業最高水準）。シフト制・深夜勤務・繁閑差による業務量の不均一、低賃金、接客ストレスが複合的に離職を促進。正社員とパート・アルバイトの混在による待遇格差が不満の温床になりやすい。店長・マネージャーの属人的なマネジメントによるパワハラが表面化しやすい業態。`;
+  } else if (biz.includes('it') || biz.includes('システム') || biz.includes('ソフト') || biz.includes('web')) {
+    industryContext = `【IT・システム業界の特性】エンジニアの引き合いが強く転職市場が活性化しているため、離職率は約10〜15%だが優秀層の流出リスクが高い。長時間労働・技術的負債・プロジェクト炎上によるバーンアウトが深刻。リモートワーク普及後の孤立感・コミュニケーション不足が組織の結束を弱める。評価制度の不透明さがエンジニアのモチベーション低下に直結しやすい。`;
+  } else {
+    industryContext = `【サービス業全般の特性】厚生労働省の「令和5年雇用動向調査」によるとサービス業の年間離職率は約15〜20%と全産業平均（約14%）を上回る。人手不足による一人当たり業務量の増大、賃金水準の低さ、キャリアパスの不明確さが離職の主要因。`;
+  }
+
+  const prompt = `あなたはLINKPRANITY（株式会社リンクプラニティ）の組織コンサルタントです。以下のアンケートデータと業界知見をもとに、クライアント経営者に提出する組織コンサルティングレポートをHTML形式で作成してください。
+
+【クライアント情報】
+- 企業名：${surveyData.clientName}
+- 従業員数：${surveyData.employeeCount}名
+- 事業内容：${surveyData.businessDescription}
+
+【業界・業種の知見】
+${industryContext}
+
+【アンケート結果】
+${JSON.stringify(surveyData, null, 2)}
+
+【出力ルール（必ず守ること）】
+- \`\`\`html や \`\`\` などのコードフェンスは含めない
+- <!DOCTYPE> <html> <head> <body> タグは含めない
+- 見出し：<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">
+- 小見出し：<h4 style="color:#0F4C5C;margin:12px 0 6px;font-size:13px;">
+- 本文：<p style="font-size:12.5px;line-height:1.9;color:#0F2A2A;margin-bottom:10px;">
+- 強調：<strong style="color:#0F4C5C;">
+- リスト：<ul style="padding-left:18px;color:#0F2A2A;font-size:12.5px;line-height:1.9;margin-bottom:10px;">
+- テーブル：class="risk-table"（thは background:#0F4C5C;color:#fff、偶数行は background:#E6F7F5）
+- リスクレベル：🔴🟡🟢で表現
+
+【レポート構成（この順番で全て完成させること）】
+
+1. 組織診断サマリー（以下3層を段落で記述）
+   ①【業界全体の課題】${surveyData.businessDescription}業界特有の離職・ハラスメント・人材定着の構造的課題を上記業界知見を活用して具体的に記述
+   ②【今回のアンケート結果から見えた課題】スコア数値・リスク指標に基づく客観分析
+   ③【${surveyData.clientName}固有の課題】自由記述・クロス分析から見えた当社特有のパターン
+
+2. 主要課題（優先度順3件）：課題名・優先度・数値根拠・影響範囲・リスク度
+
+3. リスクアセスメント：🔴離職リスク・🔴コンプライアンスリスク・🟡組織硬直化リスク（各テーブル形式）
+
+4. 改善提案アクションプラン：即時（1週間以内）・短期（1〜3ヶ月）・中長期（3〜12ヶ月）の3フェーズ
+
+5. LINKPRANITYからの所見：追加調査・外部窓口・エスカレーション提言
+
+全セクションを途中で切らず最後まで完成させること。`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      const errMsg = errData?.error?.message || `HTTPエラー ${response.status}`;
+      if (response.status === 401) {
+        clearApiKey(); // 無効キーを削除
+        throw new Error('APIキーが無効です。再入力してください。（' + errMsg + '）');
+      }
+      throw new Error(errMsg);
+    }
+
+    const data = await response.json();
+    let rawHtml = data.content.map(i => i.text || "").join("");
+    rawHtml = rawHtml.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```\s*$/i, '').trim();
+
+    loading.style.display = 'none';
+    content.style.display = 'block';
+    content.innerHTML = rawHtml;
+
+    const now = new Date();
+    document.getElementById('aiTimestamp').textContent =
+      `Claude AI による分析 / ${now.toLocaleDateString('ja-JP')} ${now.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit',second:'2-digit'})} ／ 対象：${surveyData.clientName}`;
+
+    // 再実行ボタンを追加
+    const rerunDiv = document.createElement('div');
+    rerunDiv.style.cssText = 'text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--teal-border);';
+    rerunDiv.innerHTML = `<button onclick="resetAI()" style="background:var(--bg);color:var(--teal-dark);border:1px solid var(--teal-border);border-radius:8px;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🔄 再分析する</button>`;
+    content.appendChild(rerunDiv);
+
+  } catch(err) {
+    loading.style.display = 'none';
+    initPrompt.style.display = 'block';
+    btn.disabled = false;
+    // エラーメッセージをボタン下に表示
+    let errDiv = document.getElementById('aiErrorMsg');
+    if (!errDiv) {
+      errDiv = document.createElement('div');
+      errDiv.id = 'aiErrorMsg';
+      initPrompt.appendChild(errDiv);
+    }
+    errDiv.innerHTML = `<div style="margin-top:12px;padding:10px 16px;background:#fff5f5;border:1px solid #fca5a5;border-radius:8px;font-size:12px;color:var(--danger);">
+      ⚠️ ${err.message}<br>
+      <span style="font-size:11px;color:var(--text-light);">APIキーを変更する場合は <a href="#" onclick="clearApiKey();location.reload();return false;" style="color:var(--teal);">こちら</a></span>
+    </div>`;
+  }
+}
+
+function resetAI() {
+  document.getElementById('aiContent').style.display = 'none';
+  document.getElementById('aiContent').innerHTML = '';
+  document.getElementById('aiLoading').style.display = 'none';
+  document.getElementById('aiInitPrompt').style.display = 'block';
+  document.getElementById('aiRunBtn').disabled = false;
+  document.getElementById('aiTimestamp').textContent = '';
+}
+</script>
+</body>
+</html>
