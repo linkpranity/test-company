@@ -455,25 +455,32 @@
   }
 
   /* ===== RISK TABLE (AI分析内テーブル) ===== */
-  .risk-table {
+  .risk-table,
+  #aiContent table {
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
     margin-top: 10px;
+    margin-bottom: 14px;
   }
-  .risk-table th {
+  .risk-table th,
+  #aiContent table th {
     background: var(--teal-deep);
     color: #ffffff;
     padding: 8px 12px;
     text-align: left;
     font-size: 11px;
+    font-weight: 700;
   }
-  .risk-table td {
+  .risk-table td,
+  #aiContent table td {
     padding: 8px 12px;
     border-bottom: 1px solid var(--border);
     color: var(--text);
+    vertical-align: top;
   }
-  .risk-table tr:nth-child(even) td { background: var(--teal-light); }
+  .risk-table tr:nth-child(even) td,
+  #aiContent table tr:nth-child(even) td { background: var(--teal-light); }
 
   /* ===== ACTION PLAN ===== */
   .action-plan {
@@ -564,10 +571,10 @@
   @media print {
     /* 印刷不要UI非表示 */
     .no-print-hide { display: none !important; }
+    .print-only { display: block !important; }
     #aiInitPrompt { display: none !important; }
     #aiRunBtn { display: none !important; }
-    [onclick="resetAI()"] { display: none !important; }
-    button { display: none !important; }
+    .rerun-btn { display: none !important; }
     input { border: none !important; background: transparent !important; }
 
     /* 基本リセット */
@@ -631,7 +638,10 @@
       <div class="header-meta" id="headerMeta">実施期間：― ／ 担当：岩下</div>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-      <div class="report-badge">月次組織分析レポート</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button onclick="window.print()" style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-border);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;">🖨️ 印刷</button>
+        <div class="report-badge">月次組織分析レポート</div>
+      </div>
       <div class="logo-area">
         <img src="logo.linkpranity.png" alt="LINKPRANITY" onerror="this.style.display='none'">
       </div>
@@ -1622,7 +1632,7 @@ ${JSON.stringify(surveyData, null, 2)}
     // 再実行ボタンを追加
     const rerunDiv = document.createElement('div');
     rerunDiv.style.cssText = 'text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--teal-border);';
-    rerunDiv.innerHTML = `<button onclick="resetAI()" style="background:var(--bg);color:var(--teal-dark);border:1px solid var(--teal-border);border-radius:8px;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🔄 再分析する</button>`;
+    rerunDiv.innerHTML = `<button class="rerun-btn" onclick="resetAI()" style="background:var(--bg);color:var(--teal-dark);border:1px solid var(--teal-border);border-radius:8px;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🔄 再分析する</button>`;
     content.appendChild(rerunDiv);
 
   } catch(err) {
