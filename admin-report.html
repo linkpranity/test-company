@@ -9,21 +9,23 @@
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Noto+Serif+JP:wght@400;700&display=swap');
 
   :root {
-    --primary: #1a3a5c;
-    --primary-light: #2a5a8c;
-    --accent: #00c9a7;
-    --accent2: #f4a261;
-    --danger: #e63946;
-    --warning: #f4a261;
-    --success: #2dc653;
-    --neutral: #6c757d;
-    --bg: #f0f4f8;
-    --card: #ffffff;
-    --text: #1a1a2e;
-    --text-light: #4a4a6a;
-    --border: #e0e7ef;
-    --shadow: 0 2px 16px rgba(26,58,92,0.08);
-    --radius: 12px;
+    --teal:        #0D9E8E;
+    --teal-dark:   #0A7A6E;
+    --teal-deep:   #0F4C5C;
+    --teal-light:  #E6F7F5;
+    --teal-border: #A7DED9;
+    --accent:      #0D9E8E;
+    --accent2:     #F59E0B;
+    --danger:      #DC2626;
+    --warning:     #D97706;
+    --success:     #059669;
+    --bg:          #F7FAFA;
+    --card:        #ffffff;
+    --text:        #0F2A2A;
+    --text-light:  #3D6464;
+    --border:      #D4E2E1;
+    --shadow:      0 1px 4px rgba(13,158,142,0.08), 0 4px 18px rgba(13,158,142,0.06);
+    --radius:      12px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -38,49 +40,42 @@
 
   /* ===== HEADER ===== */
   .report-header {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 60%, #1a6b8a 100%);
-    color: white;
-    padding: 28px 40px 24px;
+    background: #ffffff;
+    border-bottom: 3px solid var(--teal);
+    padding: 20px 40px 18px;
     position: relative;
-    overflow: hidden;
-  }
-  .report-header::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 220px; height: 220px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.05);
   }
   .header-top {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     gap: 20px;
   }
   .header-left h1 {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 900;
-    letter-spacing: 0.05em;
-    margin-bottom: 4px;
+    letter-spacing: 0.03em;
+    margin-bottom: 2px;
+    color: var(--teal-deep);
   }
   .header-left .company-placeholder {
     font-size: 13px;
-    opacity: 0.7;
+    color: var(--text-light);
     font-style: italic;
   }
   .header-meta {
     font-size: 12px;
-    opacity: 0.8;
-    margin-top: 8px;
+    color: var(--text-light);
+    margin-top: 4px;
   }
   .report-badge {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
+    background: var(--teal-light);
+    border: 1px solid var(--teal-border);
     border-radius: 20px;
-    padding: 6px 16px;
-    font-size: 12px;
+    padding: 5px 14px;
+    font-size: 11px;
     font-weight: 700;
+    color: var(--teal-dark);
     letter-spacing: 0.05em;
     white-space: nowrap;
   }
@@ -91,8 +86,6 @@
   }
   .logo-area img {
     height: 32px;
-    filter: brightness(0) invert(1);
-    opacity: 0.85;
   }
 
   /* ===== KPI BAR ===== */
@@ -100,14 +93,14 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0;
-    background: var(--primary);
-    border-top: 1px solid rgba(255,255,255,0.1);
+    background: var(--teal-deep);
+    border-top: none;
   }
   .kpi-item {
-    padding: 16px 20px;
+    padding: 14px 20px;
     text-align: center;
-    color: white;
-    border-right: 1px solid rgba(255,255,255,0.1);
+    color: #ffffff;
+    border-right: 1px solid rgba(255,255,255,0.12);
   }
   .kpi-item:last-child { border-right: none; }
   .kpi-value {
@@ -115,10 +108,11 @@
     font-weight: 900;
     line-height: 1;
     margin-bottom: 4px;
+    color: #ffffff;
   }
-  .kpi-value.danger { color: #ff6b6b; }
-  .kpi-value.warning { color: var(--accent2); }
-  .kpi-label { font-size: 11px; opacity: 0.75; }
+  .kpi-value.danger { color: #FCA5A5; }
+  .kpi-value.warning { color: #FCD34D; }
+  .kpi-label { font-size: 11px; color: rgba(255,255,255,0.75); }
 
   /* ===== MAIN CONTENT ===== */
   .main-content {
@@ -131,8 +125,8 @@
   .section-title {
     font-size: 16px;
     font-weight: 900;
-    color: var(--primary);
-    border-left: 4px solid var(--accent);
+    color: var(--teal-deep);
+    border-left: 4px solid var(--teal);
     padding-left: 12px;
     margin-bottom: 16px;
     letter-spacing: 0.03em;
@@ -140,7 +134,7 @@
   .section-subtitle {
     font-size: 13px;
     font-weight: 700;
-    color: var(--primary-light);
+    color: var(--teal-dark);
     margin-bottom: 10px;
     display: flex;
     align-items: center;
@@ -257,10 +251,10 @@
   .dist-track { flex: 1; height: 20px; background: var(--border); border-radius: 4px; overflow: hidden; }
   .dist-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; color: white; font-size: 11px; font-weight: 700; transition: width 1s ease; }
   .dist-count { width: 60px; flex-shrink: 0; color: var(--text-light); font-size: 11px; }
-  .dist-pos { background: linear-gradient(90deg, #2dc653, #00b894); }
-  .dist-neu { background: linear-gradient(90deg, #74b9ff, #0984e3); }
-  .dist-neg { background: linear-gradient(90deg, #f4a261, #e17055); }
-  .dist-very-neg { background: linear-gradient(90deg, #e63946, #c0392b); }
+  .dist-pos { background: linear-gradient(90deg, #059669, #0D9E8E); }
+  .dist-neu { background: linear-gradient(90deg, #0D9E8E, #0F4C5C); }
+  .dist-neg { background: linear-gradient(90deg, #D97706, #B45309); }
+  .dist-very-neg { background: linear-gradient(90deg, #DC2626, #9B1C1C); }
 
   /* ===== CROSS ANALYSIS TABLE ===== */
   table {
@@ -269,8 +263,8 @@
     font-size: 12px;
   }
   th {
-    background: var(--primary);
-    color: white;
+    background: var(--teal-deep);
+    color: #ffffff;
     padding: 8px 12px;
     text-align: left;
     font-weight: 700;
@@ -280,8 +274,9 @@
     padding: 8px 12px;
     border-bottom: 1px solid var(--border);
     vertical-align: middle;
+    color: var(--text);
   }
-  tr:nth-child(even) td { background: #f8fafc; }
+  tr:nth-child(even) td { background: var(--teal-light); }
   .tag {
     display: inline-block;
     padding: 2px 8px;
@@ -290,57 +285,49 @@
     font-weight: 700;
   }
   .tag.danger { background: #fde8ea; color: var(--danger); }
-  .tag.warning { background: #fff3e0; color: #d4820a; }
-  .tag.success { background: #e8f8ee; color: #1a8a45; }
+  .tag.warning { background: #fef3c7; color: var(--warning); }
+  .tag.success { background: #d1fae5; color: var(--success); }
 
   /* ===== VOICE CARDS ===== */
   .voice-card {
     border-left: 3px solid var(--border);
     padding: 10px 14px;
     margin-bottom: 10px;
-    background: #f8fafc;
+    background: var(--bg);
     border-radius: 0 8px 8px 0;
     font-size: 12px;
     color: var(--text);
   }
   .voice-card.harassment {
     border-left-color: var(--danger);
-    background: #fef8f8;
+    background: #fff5f5;
   }
   .voice-card.general {
-    border-left-color: var(--accent);
-    background: #f0fdf8;
+    border-left-color: var(--teal);
+    background: var(--teal-light);
   }
   .voice-icon { margin-right: 6px; }
 
   /* ===== AI ANALYSIS SECTION ===== */
   .ai-section {
-    background: linear-gradient(135deg, #0f2a45 0%, #1a3a5c 100%);
+    background: #ffffff;
     border-radius: 16px;
+    border: 2px solid var(--teal-border);
     padding: 28px;
-    color: white;
+    color: var(--text);
     margin-bottom: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .ai-section::before {
-    content: '✦';
-    position: absolute;
-    right: 24px; top: 20px;
-    font-size: 80px;
-    opacity: 0.04;
   }
   .ai-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(0,201,167,0.2);
-    border: 1px solid rgba(0,201,167,0.4);
+    background: var(--teal-light);
+    border: 1px solid var(--teal-border);
     border-radius: 20px;
     padding: 4px 14px;
     font-size: 11px;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--teal-dark);
     margin-bottom: 16px;
     letter-spacing: 0.05em;
   }
@@ -348,22 +335,36 @@
     font-size: 18px;
     font-weight: 900;
     margin-bottom: 16px;
-    color: white;
+    color: var(--teal-deep);
   }
   .ai-section h3 {
     font-size: 14px;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--teal-dark);
     margin: 20px 0 8px;
-    border-bottom: 1px solid rgba(0,201,167,0.2);
+    border-bottom: 2px solid var(--teal-border);
     padding-bottom: 6px;
+  }
+  .ai-section h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 12px 0 6px;
   }
   .ai-section p {
     font-size: 12.5px;
-    line-height: 1.8;
-    color: rgba(255,255,255,0.85);
+    line-height: 1.9;
+    color: var(--text);
     margin-bottom: 12px;
   }
+  .ai-section ul, .ai-section ol {
+    padding-left: 18px;
+    margin-bottom: 12px;
+    color: var(--text);
+    font-size: 12.5px;
+    line-height: 1.9;
+  }
+  .ai-section strong { color: var(--teal-deep); }
   .summary-3col {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -371,15 +372,15 @@
     margin: 16px 0;
   }
   .summary-col {
-    background: rgba(255,255,255,0.06);
+    background: var(--teal-light);
     border-radius: 10px;
     padding: 16px;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid var(--teal-border);
   }
   .summary-col h4 {
     font-size: 11px;
     font-weight: 700;
-    color: var(--accent2);
+    color: var(--teal-dark);
     margin-bottom: 10px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -387,34 +388,35 @@
   .summary-col ul {
     list-style: none;
     font-size: 12px;
-    color: rgba(255,255,255,0.8);
+    color: var(--text);
+    padding-left: 0;
   }
   .summary-col ul li {
     padding: 4px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid var(--teal-border);
     display: flex;
     align-items: flex-start;
     gap: 6px;
   }
   .summary-col ul li::before {
     content: '▸';
-    color: var(--accent);
+    color: var(--teal);
     flex-shrink: 0;
     margin-top: 1px;
   }
 
   /* ===== ISSUE CARDS ===== */
   .issue-card {
-    background: rgba(255,255,255,0.05);
+    background: var(--bg);
     border-radius: 10px;
     padding: 16px;
     margin-bottom: 12px;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
     border-left: 4px solid var(--accent2);
   }
-  .issue-card.p1 { border-left-color: #ff6b6b; }
-  .issue-card.p2 { border-left-color: var(--accent2); }
-  .issue-card.p3 { border-left-color: #74b9ff; }
+  .issue-card.p1 { border-left-color: var(--danger); }
+  .issue-card.p2 { border-left-color: var(--warning); }
+  .issue-card.p3 { border-left-color: var(--teal); }
   .issue-header {
     display: flex;
     justify-content: space-between;
@@ -424,7 +426,7 @@
   .issue-title {
     font-size: 13px;
     font-weight: 700;
-    color: white;
+    color: var(--text);
   }
   .priority-badge {
     font-size: 10px;
@@ -433,9 +435,9 @@
     border-radius: 10px;
     flex-shrink: 0;
   }
-  .priority-badge.p1 { background: rgba(255,107,107,0.2); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.3); }
-  .priority-badge.p2 { background: rgba(244,162,97,0.2); color: var(--accent2); border: 1px solid rgba(244,162,97,0.3); }
-  .priority-badge.p3 { background: rgba(116,185,255,0.2); color: #74b9ff; border: 1px solid rgba(116,185,255,0.3); }
+  .priority-badge.p1 { background: #fde8ea; color: var(--danger); border: 1px solid #fca5a5; }
+  .priority-badge.p2 { background: #fef3c7; color: var(--warning); border: 1px solid #fcd34d; }
+  .priority-badge.p3 { background: var(--teal-light); color: var(--teal-dark); border: 1px solid var(--teal-border); }
 
   .metric-row {
     display: flex;
@@ -444,14 +446,15 @@
     margin-bottom: 8px;
   }
   .metric-chip {
-    background: rgba(255,255,255,0.08);
+    background: var(--teal-light);
     border-radius: 6px;
     padding: 4px 10px;
     font-size: 11px;
-    color: rgba(255,255,255,0.7);
+    color: var(--teal-dark);
+    border: 1px solid var(--teal-border);
   }
 
-  /* ===== RISK TABLE ===== */
+  /* ===== RISK TABLE (AI分析内テーブル) ===== */
   .risk-table {
     width: 100%;
     border-collapse: collapse;
@@ -459,18 +462,18 @@
     margin-top: 10px;
   }
   .risk-table th {
-    background: rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.8);
+    background: var(--teal-deep);
+    color: #ffffff;
     padding: 8px 12px;
     text-align: left;
     font-size: 11px;
   }
   .risk-table td {
     padding: 8px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    color: rgba(255,255,255,0.8);
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
   }
-  .risk-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .risk-table tr:nth-child(even) td { background: var(--teal-light); }
 
   /* ===== ACTION PLAN ===== */
   .action-plan {
@@ -480,15 +483,15 @@
     margin-top: 12px;
   }
   .action-item {
-    background: rgba(255,255,255,0.05);
+    background: var(--teal-light);
     border-radius: 10px;
     padding: 14px;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid var(--teal-border);
   }
   .action-timing {
     font-size: 10px;
     font-weight: 700;
-    color: var(--accent2);
+    color: var(--teal-dark);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 6px;
@@ -496,13 +499,14 @@
   .action-item h4 {
     font-size: 12px;
     font-weight: 700;
-    color: white;
+    color: var(--teal-deep);
     margin-bottom: 8px;
   }
   .action-item ul {
     list-style: none;
     font-size: 11px;
-    color: rgba(255,255,255,0.75);
+    color: var(--text);
+    padding-left: 0;
   }
   .action-item ul li {
     padding: 2px 0;
@@ -512,29 +516,26 @@
   }
   .action-item ul li::before {
     content: '→';
-    color: var(--accent);
+    color: var(--teal);
     flex-shrink: 0;
   }
 
   /* ===== FOOTER ===== */
   .report-footer {
-    background: var(--primary);
-    color: rgba(255,255,255,0.7);
+    background: var(--teal-deep);
+    color: rgba(255,255,255,0.85);
     text-align: center;
     padding: 18px;
     font-size: 11px;
     margin-top: 20px;
   }
-  .report-footer strong { color: white; }
+  .report-footer strong { color: #ffffff; }
 
   /* ===== CHART CONTAINERS ===== */
   .chart-wrap {
     position: relative;
-    height: 180px;
-  }
-  .chart-wrap-sm {
-    position: relative;
-    height: 140px;
+    height: 220px;
+    width: 100%;
   }
 
   /* ===== CONCERN BARS ===== */
@@ -559,10 +560,53 @@
   .concern-count { width: 50px; text-align: right; font-size: 11px; color: var(--text-light); font-weight: 700; }
 
   @media print {
-    body { background: white; }
-    .main-content { max-width: 100%; }
-    .card { break-inside: avoid; }
-    .ai-section { break-inside: avoid; }
+    /* 基本リセット */
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: #fff !important; font-size: 11px; }
+    .main-content { max-width: 100%; padding: 12px; }
+
+    /* ヘッダー・KPIバーは1ページ目に固定 */
+    .report-header { padding: 12px 20px; }
+    .header-left h1 { font-size: 16px; }
+    .kpi-bar { break-inside: avoid; }
+
+    /* 改ページ禁止 */
+    .card { break-inside: avoid; page-break-inside: avoid; margin-bottom: 10px; box-shadow: none; border: 1px solid #D4E2E1; }
+    .ai-section { break-inside: avoid; page-break-inside: avoid; box-shadow: none; }
+    .risk-circles { break-inside: avoid; }
+    .score-grid { break-inside: avoid; }
+    .section-title { break-after: avoid; page-break-after: avoid; margin-top: 16px; }
+
+    /* グリッドを1列化（印刷時の横はみ出し防止） */
+    .score-grid { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .card-grid-2 { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .risk-circles { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+    /* グラフは高さを抑えて確実に収める */
+    .chart-wrap { height: 160px !important; }
+    .chart-wrap canvas { max-height: 160px !important; }
+    #correspondenceChart { max-height: 200px !important; }
+    [style*="height:320px"] { height: 200px !important; }
+
+    /* 分布バーのバックグラウンド印刷保証 */
+    .dist-fill { -webkit-print-color-adjust: exact !important; }
+    .concern-fill { -webkit-print-color-adjust: exact !important; }
+    .score-bar-fill { -webkit-print-color-adjust: exact !important; }
+
+    /* KPIバー・ヘッダー背景印刷保証 */
+    .kpi-bar { -webkit-print-color-adjust: exact !important; }
+    .kpi-item { padding: 8px 12px; }
+    .kpi-value { font-size: 22px; }
+
+    /* フッター */
+    .report-footer { margin-top: 10px; padding: 10px; font-size: 10px; }
+
+    /* AIタイムスタンプ */
+    #aiTimestamp { font-size: 10px; }
+
+    /* テーブルの見切れ防止 */
+    table { break-inside: avoid; page-break-inside: avoid; }
+    td, th { padding: 5px 8px; font-size: 10px; }
   }
 </style>
 </head>
@@ -610,35 +654,35 @@
   <!-- ===== SCORE SECTION ===== -->
   <div class="section-title">組織コンディションスコア</div>
   <div class="score-grid">
-    <div class="score-card danger">
+    <div class="score-card danger" id="scoreRelations">
       <div class="score-label">人間関係</div>
       <div class="score-number danger">25</div>
       <div style="font-size:10px;color:var(--text-light);">/100</div>
       <div class="score-badge danger">要対応</div>
       <div class="score-bar-track"><div class="score-bar-fill" style="width:25%;background:var(--danger);"></div></div>
     </div>
-    <div class="score-card success">
+    <div class="score-card success" id="scoreEvaluation">
       <div class="score-label">評価制度</div>
       <div class="score-number success">75</div>
       <div style="font-size:10px;color:var(--text-light);">/100</div>
       <div class="score-badge success">良好</div>
       <div class="score-bar-track"><div class="score-bar-fill" style="width:75%;background:var(--success);"></div></div>
     </div>
-    <div class="score-card warning">
+    <div class="score-card warning" id="scoreWorkload">
       <div class="score-label">業務量</div>
       <div class="score-number warning">58</div>
       <div style="font-size:10px;color:var(--text-light);">/100</div>
       <div class="score-badge warning">注意</div>
       <div class="score-bar-track"><div class="score-bar-fill" style="width:58%;background:var(--warning);"></div></div>
     </div>
-    <div class="score-card warning">
+    <div class="score-card warning" id="scoreStay">
       <div class="score-label">継続就業</div>
       <div class="score-number warning">50</div>
       <div style="font-size:10px;color:var(--text-light);">/100</div>
       <div class="score-badge warning">注意</div>
       <div class="score-bar-track"><div class="score-bar-fill" style="width:50%;background:var(--warning);"></div></div>
     </div>
-    <div class="score-card warning">
+    <div class="score-card warning" id="scoreSpeak">
       <div class="score-label">発言しやすさ</div>
       <div class="score-number warning">50</div>
       <div style="font-size:10px;color:var(--text-light);">/100</div>
@@ -689,69 +733,45 @@
     <div class="risk-circle-card">
       <div class="circle-container">
         <svg width="80" height="80" viewBox="0 0 80 80">
-          <circle cx="40" cy="40" r="34" fill="none" stroke="#f0f4f8" stroke-width="8"/>
-          <circle cx="40" cy="40" r="34" fill="none" stroke="#e63946" stroke-width="8"
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#D4E2E1" stroke-width="8"/>
+          <circle id="arcResign" cx="40" cy="40" r="34" fill="none" stroke="#DC2626" stroke-width="8"
             stroke-dasharray="106.8 213.6" stroke-linecap="round"/>
         </svg>
-        <div class="circle-text" style="color:var(--danger);">50%</div>
+        <div class="circle-text" style="color:var(--danger);" id="riskResignPct">50%</div>
       </div>
-      <div class="risk-count" style="color:var(--danger);">3名</div>
+      <div class="risk-count" style="color:var(--danger);" id="riskResignCount">3名</div>
       <div class="risk-desc">離職真剣検討</div>
     </div>
     <div class="risk-circle-card">
       <div class="circle-container">
         <svg width="80" height="80" viewBox="0 0 80 80">
-          <circle cx="40" cy="40" r="34" fill="none" stroke="#f0f4f8" stroke-width="8"/>
-          <circle cx="40" cy="40" r="34" fill="none" stroke="#f4a261" stroke-width="8"
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#D4E2E1" stroke-width="8"/>
+          <circle id="arcHarass" cx="40" cy="40" r="34" fill="none" stroke="#D97706" stroke-width="8"
             stroke-dasharray="71.2 213.6" stroke-linecap="round"/>
         </svg>
-        <div class="circle-text" style="color:var(--warning);">33%</div>
+        <div class="circle-text" style="color:var(--warning);" id="riskHarassPct">33%</div>
       </div>
-      <div class="risk-count" style="color:var(--warning);">2名</div>
+      <div class="risk-count" style="color:var(--warning);" id="riskHarassCount">2名</div>
       <div class="risk-desc">ハラスメント報告</div>
     </div>
     <div class="risk-circle-card">
       <div class="circle-container">
         <svg width="80" height="80" viewBox="0 0 80 80">
-          <circle cx="40" cy="40" r="34" fill="none" stroke="#f0f4f8" stroke-width="8"/>
-          <circle cx="40" cy="40" r="34" fill="none" stroke="#74b9ff" stroke-width="8"
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#D4E2E1" stroke-width="8"/>
+          <circle id="arcSpeak" cx="40" cy="40" r="34" fill="none" stroke="#0D9E8E" stroke-width="8"
             stroke-dasharray="142.4 213.6" stroke-linecap="round"/>
         </svg>
-        <div class="circle-text" style="color:#2d82d6;">67%</div>
+        <div class="circle-text" style="color:var(--teal-dark);" id="riskSpeakPct">67%</div>
       </div>
-      <div class="risk-count" style="color:#2d82d6;">4名</div>
+      <div class="risk-count" style="color:var(--teal-dark);" id="riskSpeakCount">4名</div>
       <div class="risk-desc">言いづらさあり</div>
     </div>
   </div>
 
-  <!-- Concern TOP5 -->
+  <!-- Concern TOP5 — dynamically rendered -->
   <div class="card">
     <div class="section-subtitle">不安・課題 TOP5</div>
-    <div class="concern-item">
-      <div class="concern-label">評価制度</div>
-      <div class="concern-track"><div class="concern-fill" style="width:67%;background:linear-gradient(90deg,#e63946,#c0392b);">67%</div></div>
-      <div class="concern-count">4名 (67%)</div>
-    </div>
-    <div class="concern-item">
-      <div class="concern-label">ハラスメント</div>
-      <div class="concern-track"><div class="concern-fill" style="width:67%;background:linear-gradient(90deg,#e63946,#c0392b);">67%</div></div>
-      <div class="concern-count">4名 (67%)</div>
-    </div>
-    <div class="concern-item">
-      <div class="concern-label">給与・待遇</div>
-      <div class="concern-track"><div class="concern-fill" style="width:50%;background:linear-gradient(90deg,#f4a261,#e17055);">50%</div></div>
-      <div class="concern-count">3名 (50%)</div>
-    </div>
-    <div class="concern-item">
-      <div class="concern-label">その他</div>
-      <div class="concern-track"><div class="concern-fill" style="width:50%;background:linear-gradient(90deg,#f4a261,#e17055);">50%</div></div>
-      <div class="concern-count">3名 (50%)</div>
-    </div>
-    <div class="concern-item">
-      <div class="concern-label">情報共有不足</div>
-      <div class="concern-track"><div class="concern-fill" style="width:33%;background:linear-gradient(90deg,#74b9ff,#0984e3);">33%</div></div>
-      <div class="concern-count">2名 (33%)</div>
-    </div>
+    <div id="concernsList"></div>
   </div>
 
   <!-- ===== CROSS ANALYSIS ===== -->
@@ -760,51 +780,15 @@
     <div class="card">
       <div class="section-subtitle">勤続年数別</div>
       <table>
-        <thead>
-          <tr><th>属性</th><th>人数</th><th>人間関係</th><th>業務量</th><th>継続意向</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1〜3年</td><td>5名</td>
-            <td><span class="tag danger">要対応 30</span></td>
-            <td><span class="tag warning">注意 50</span></td>
-            <td><span class="tag danger">要対応 40</span></td>
-          </tr>
-          <tr>
-            <td>10年以上</td><td>1名</td>
-            <td><span class="tag danger">要対応 0</span></td>
-            <td><span class="tag success">良好 100</span></td>
-            <td><span class="tag success">良好 100</span></td>
-          </tr>
-        </tbody>
+        <thead><tr><th>属性</th><th>人数</th><th>人間関係</th><th>業務量</th><th>継続意向</th></tr></thead>
+        <tbody id="tenureTableBody"></tbody>
       </table>
     </div>
     <div class="card">
       <div class="section-subtitle">所属区分別</div>
       <table>
-        <thead>
-          <tr><th>属性</th><th>人数</th><th>人間関係</th><th>業務量</th><th>継続意向</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>管理職（部長・課長）</td><td>1名</td>
-            <td><span class="tag danger">要対応 0</span></td>
-            <td><span class="tag success">良好 100</span></td>
-            <td><span class="tag danger">要対応 0</span></td>
-          </tr>
-          <tr>
-            <td>リーダー・主任</td><td>2名</td>
-            <td><span class="tag danger">要対応 25</span></td>
-            <td><span class="tag danger">要対応 25</span></td>
-            <td><span class="tag success">良好 100</span></td>
-          </tr>
-          <tr>
-            <td>パート・アルバイト</td><td>1名</td>
-            <td><span class="tag danger">要対応 0</span></td>
-            <td><span class="tag success">良好 100</span></td>
-            <td><span class="tag danger">要対応 0</span></td>
-          </tr>
-        </tbody>
+        <thead><tr><th>属性</th><th>人数</th><th>人間関係</th><th>業務量</th><th>継続意向</th></tr></thead>
+        <tbody id="roleTableBody"></tbody>
       </table>
     </div>
   </div>
@@ -817,30 +801,38 @@
       <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
     </div>
     <div class="card">
-      <div class="section-subtitle">勤続年数別 継続意向スコア比較</div>
+      <div class="section-subtitle">属性別スコア比較（勤続年数・役職）</div>
       <div class="chart-wrap"><canvas id="barChart"></canvas></div>
     </div>
   </div>
+  <!-- コレスポンデンス分析 -->
   <div class="card">
-    <div class="section-subtitle">不安・課題 分布（全回答者ベース）</div>
-    <div class="chart-wrap"><canvas id="horizontalBar"></canvas></div>
+    <div class="section-subtitle">不安・課題 × 属性別 コレスポンデンス分析</div>
+    <div style="font-size:11px;color:var(--text-light);margin-bottom:10px;">
+      バブルの大きさ＝回答人数、位置＝課題の集中度・属性との対応関係を示す。右上ほど「高リスク・高集中」
+    </div>
+    <div style="position:relative;height:320px;"><canvas id="correspondenceChart"></canvas></div>
   </div>
 
   <!-- ===== VOICE SECTION ===== -->
   <div class="section-title">従業員の声</div>
   <div class="card-grid-2">
     <div class="card">
-      <div class="section-subtitle">💬 一般コメント（3件）</div>
-      <div class="voice-card general"><span class="voice-icon">💬</span>上司が話を聞いてくれない</div>
-      <div class="voice-card general"><span class="voice-icon">💬</span>評価基準を明確にして、業務が終わり次第帰宅する流れを作ってほしい</div>
-      <div class="voice-card general"><span class="voice-icon">💬</span>いつも残業になるのでならないように調整してほしい</div>
+      <div class="section-subtitle">💬 一般コメント（<span id="voicesFreeCount">3</span>件）</div>
+      <div id="voicesFree">
+        <div class="voice-card general"><span class="voice-icon">💬</span>上司が話を聞いてくれない</div>
+        <div class="voice-card general"><span class="voice-icon">💬</span>評価基準を明確にして、業務が終わり次第帰宅する流れを作ってほしい</div>
+        <div class="voice-card general"><span class="voice-icon">💬</span>いつも残業になるのでならないように調整してほしい</div>
+      </div>
     </div>
     <div class="card">
-      <div class="section-subtitle" style="color:var(--danger);">⚠️ ハラスメント・懸念（4件）</div>
-      <div class="voice-card harassment"><span class="voice-icon">⚠️</span>岩下店長がハラスメントしてきます。</div>
-      <div class="voice-card harassment"><span class="voice-icon">⚠️</span>同僚がお店の売上を抜いているのを見かけたことがある</div>
-      <div class="voice-card harassment"><span class="voice-icon">⚠️</span>岩下店長が女の子を席につける時に二の腕を触っているのを目撃しました。</div>
-      <div class="voice-card harassment"><span class="voice-icon">⚠️</span>冗談を過ぎた発言をしている人がいる</div>
+      <div class="section-subtitle" style="color:var(--danger);">⚠️ ハラスメント・懸念（<span id="voicesHarassCount">4</span>件）</div>
+      <div id="voicesHarass">
+        <div class="voice-card harassment"><span class="voice-icon">⚠️</span>岩下店長がハラスメントしてきます。</div>
+        <div class="voice-card harassment"><span class="voice-icon">⚠️</span>同僚がお店の売上を抜いているのを見かけたことがある</div>
+        <div class="voice-card harassment"><span class="voice-icon">⚠️</span>岩下店長が女の子を席につける時に二の腕を触っているのを目撃しました。</div>
+        <div class="voice-card harassment"><span class="voice-icon">⚠️</span>冗談を過ぎた発言をしている人がいる</div>
+      </div>
     </div>
   </div>
 
@@ -850,7 +842,7 @@
     <h2>✨ AI分析・課題抽出・改善提案</h2>
 
     <div id="aiContent">
-      <div style="text-align:center;padding:40px 0;color:rgba(255,255,255,0.5);">
+      <div style="text-align:center;padding:40px 0;color:var(--text-light);">
         <div style="font-size:32px;margin-bottom:12px;">⟳</div>
         <div>AI分析を生成中...</div>
       </div>
@@ -868,163 +860,527 @@
 </div>
 
 <script>
-// ===== CHARTS =====
-const chartDefaults = {
-  plugins: { legend: { labels: { font: { family: "'Noto Sans JP'" }, boxWidth: 12 } } }
+// ============================================================
+//  データ取得ユーティリティ
+//  index.html が localStorage に保存するキー: 'surveyResponses'
+//  各レコード: { answers: { tenure, role, relations, evaluation,
+//    workload, stay, speak_up, concerns:[], comments, harassment,
+//    incident, consult } }
+// ============================================================
+const STORAGE_KEY = 'surveyResponses';
+
+function getResponses() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+}
+
+// スコア計算（5択: 満足系）
+// 1=とても満足 2=やや満足 3=どちら 4=やや不満 5=とても不満
+const SCORE_MAP_SAT = { 0:100, 1:75, 2:50, 3:25, 4:0 };
+// 継続意向: 1=とても思う 2=やや思う 3=あまり思わない 4=全く思わない
+const SCORE_MAP_STAY = { 0:100, 1:75, 2:25, 3:0 };
+
+function scoreRelations(r) {
+  const v = ['とても満足している','やや満足している','どちらでもない','やや不満','とても不満']
+    .indexOf(r.answers?.relations);
+  return v < 0 ? null : SCORE_MAP_SAT[v];
+}
+function scoreEvaluation(r) {
+  const v = ['とても満足している','やや満足している','どちらでもない','やや不満','とても不満']
+    .indexOf(r.answers?.evaluation);
+  return v < 0 ? null : SCORE_MAP_SAT[v];
+}
+function scoreWorkload(r) {
+  const v = ['とても満足している','やや満足している','どちらでもない','やや不満','とても不満']
+    .indexOf(r.answers?.workload);
+  return v < 0 ? null : SCORE_MAP_SAT[v];
+}
+function scoreStay(r) {
+  const v = ['とてもそう思う','ややそう思う','あまり思わない','全く思わない']
+    .indexOf(r.answers?.stay);
+  return v < 0 ? null : SCORE_MAP_STAY[v];
+}
+function avgScore(arr) {
+  const valid = arr.filter(v => v !== null);
+  return valid.length ? Math.round(valid.reduce((a,b)=>a+b,0)/valid.length) : null;
+}
+function scoreLabel(s) {
+  if (s === null) return { cls:'warning', label:'データなし' };
+  if (s >= 70) return { cls:'success', label:'良好' };
+  if (s >= 50) return { cls:'warning', label:'注意' };
+  return { cls:'danger', label:'要対応' };
+}
+function tagHtml(score) {
+  const s = scoreLabel(score);
+  const v = score !== null ? score : '—';
+  return `<span class="tag ${s.cls}">${s.label} ${v}</span>`;
+}
+
+// ============================================================
+//  フォールバック固定データ（回答0件時に表示）
+// ============================================================
+const FALLBACK = {
+  total: 6, responseRate: 20,
+  scores: { relations:25, evaluation:75, workload:58, stay:50, speak:50 },
+  risks: { resign:{pct:50,count:3}, harassment:{pct:33,count:2}, speak:{pct:67,count:4} },
+  concerns: [
+    {name:'評価制度',count:4,pct:67},
+    {name:'ハラスメント',count:4,pct:67},
+    {name:'給与・待遇',count:3,pct:50},
+    {name:'その他',count:3,pct:50},
+    {name:'情報共有不足',count:2,pct:33},
+  ],
+  tenure: [
+    { group:'1〜3年', count:5, relations:30, workload:50, stay:40 },
+    { group:'10年以上', count:1, relations:0, workload:100, stay:100 },
+  ],
+  role: [
+    { group:'管理職（部長・課長）', count:1, relations:0, workload:100, stay:0 },
+    { group:'リーダー・主任', count:2, relations:25, workload:25, stay:100 },
+    { group:'パート・アルバイト', count:1, relations:0, workload:100, stay:0 },
+  ],
+  voices: {
+    free:['上司が話を聞いてくれない','評価基準を明確にして、業務が終わり次第帰宅する流れを作ってほしい','いつも残業になるのでならないように調整してほしい'],
+    harassment:['岩下店長がハラスメントしてきます。','同僚がお店の売上を抜いているのを見かけたことがある','岩下店長が女の子を席につける時に二の腕を触っているのを目撃しました。','冗談を過ぎた発言をしている人がいる'],
+  }
 };
 
-// Radar
-new Chart(document.getElementById('radarChart'), {
-  type: 'radar',
-  data: {
-    labels: ['人間関係', '評価制度', '業務量', '継続就業', '発言しやすさ'],
-    datasets: [{
-      label: '今月',
-      data: [25, 75, 58, 50, 50],
-      fill: true,
-      backgroundColor: 'rgba(0,201,167,0.15)',
-      borderColor: '#00c9a7',
-      pointBackgroundColor: '#00c9a7',
-      borderWidth: 2,
-    }]
-  },
-  options: {
-    ...chartDefaults,
-    scales: {
-      r: {
-        min: 0, max: 100,
-        ticks: { stepSize: 25, font: { size: 10 } },
-        pointLabels: { font: { size: 11, family: "'Noto Sans JP'" } },
-        grid: { color: 'rgba(0,0,0,0.07)' }
-      }
-    },
-    plugins: { legend: { display: false } }
-  }
-});
+// ============================================================
+//  メインレンダリング
+// ============================================================
+function buildReportData() {
+  const R = getResponses();
+  if (!R.length) return { ...FALLBACK, useFallback: true };
 
-// Bar
-new Chart(document.getElementById('barChart'), {
-  type: 'bar',
-  data: {
-    labels: ['1〜3年（5名）', '10年以上（1名）'],
-    datasets: [
-      { label: '人間関係', data: [30, 0], backgroundColor: '#e63946bb', borderRadius: 4 },
-      { label: '業務量', data: [50, 100], backgroundColor: '#f4a261bb', borderRadius: 4 },
-      { label: '継続意向', data: [40, 100], backgroundColor: '#00c9a7bb', borderRadius: 4 },
-    ]
-  },
-  options: {
-    ...chartDefaults,
-    scales: {
-      y: { min: 0, max: 100, ticks: { stepSize: 25 } }
-    },
-    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }
-  }
-});
+  const total = R.length;
 
-// Horizontal bar
-new Chart(document.getElementById('horizontalBar'), {
-  type: 'bar',
-  data: {
-    labels: ['評価制度', 'ハラスメント', '給与・待遇', 'その他', '情報共有不足'],
-    datasets: [{
-      label: '回答者数（名）',
-      data: [4, 4, 3, 3, 2],
-      backgroundColor: ['#e63946cc','#e63946cc','#f4a261cc','#f4a261cc','#74b9ffcc'],
-      borderRadius: 4,
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    plugins: { legend: { display: false } },
-    scales: {
-      x: { min: 0, max: 6, ticks: { stepSize: 1 } }
-    }
-  }
-});
+  // スコア
+  const relScores  = R.map(scoreRelations);
+  const evalScores = R.map(scoreEvaluation);
+  const wlScores   = R.map(scoreWorkload);
+  const stayScores = R.map(scoreStay);
 
-// ===== AI ANALYSIS =====
-async function generateAIAnalysis() {
-  const surveyData = {
-    totalRespondents: 6,
-    responseRate: '20%',
-    totalEmployees: 30,
+  // speak: 言いづらいことがある → count
+  const speakBadCount = R.filter(r => ['ある','少しある'].includes(r.answers?.speak_up)).length;
+  const speakScore = Math.round((1 - speakBadCount/total)*100);
+
+  // resign: あまり思わない + 全く思わない
+  const resignCount = R.filter(r => ['あまり思わない','全く思わない'].includes(r.answers?.stay)).length;
+  // harassment
+  const harassCount = R.filter(r => r.answers?.harassment && r.answers.harassment.trim()).length;
+  const incidentCount = R.filter(r => r.answers?.incident && r.answers.incident.trim()).length;
+  const totalHarass = harassCount + incidentCount;
+
+  // concerns
+  const concernMap = {};
+  R.forEach(r => {
+    (r.answers?.concerns || []).forEach(c => {
+      if (c && c !== '特になし') concernMap[c] = (concernMap[c]||0)+1;
+    });
+  });
+  const concerns = Object.entries(concernMap)
+    .sort((a,b)=>b[1]-a[1]).slice(0,5)
+    .map(([name,count])=>({name,count,pct:Math.round(count/total*100)}));
+
+  // cross: tenure
+  const tenureGroups = {};
+  R.forEach((r,i) => {
+    const key = r.answers?.tenure || '不明';
+    if (!tenureGroups[key]) tenureGroups[key] = {count:0,rel:[],wl:[],stay:[]};
+    tenureGroups[key].count++;
+    if (relScores[i]!==null) tenureGroups[key].rel.push(relScores[i]);
+    if (wlScores[i]!==null) tenureGroups[key].wl.push(wlScores[i]);
+    if (stayScores[i]!==null) tenureGroups[key].stay.push(stayScores[i]);
+  });
+  const tenure = Object.entries(tenureGroups).map(([group,d])=>({
+    group, count:d.count,
+    relations:avgScore(d.rel), workload:avgScore(d.wl), stay:avgScore(d.stay)
+  }));
+
+  // cross: role
+  const roleGroups = {};
+  R.forEach((r,i) => {
+    const key = r.answers?.role || '不明';
+    if (!roleGroups[key]) roleGroups[key] = {count:0,rel:[],wl:[],stay:[]};
+    roleGroups[key].count++;
+    if (relScores[i]!==null) roleGroups[key].rel.push(relScores[i]);
+    if (wlScores[i]!==null) roleGroups[key].wl.push(wlScores[i]);
+    if (stayScores[i]!==null) roleGroups[key].stay.push(stayScores[i]);
+  });
+  const role = Object.entries(roleGroups).map(([group,d])=>({
+    group, count:d.count,
+    relations:avgScore(d.rel), workload:avgScore(d.wl), stay:avgScore(d.stay)
+  }));
+
+  // voices
+  const free = R.map(r=>r.answers?.comments).filter(Boolean);
+  const harassment = R.map(r=>r.answers?.harassment).filter(Boolean)
+    .concat(R.map(r=>r.answers?.incident).filter(Boolean));
+
+  return {
+    total, responseRate: null, useFallback: false,
     scores: {
-      humanRelations: 25,
-      evaluationSystem: 75,
-      workload: 58,
-      continuationIntent: 50,
-      speakEase: 50
+      relations: avgScore(relScores) ?? 0,
+      evaluation: avgScore(evalScores) ?? 0,
+      workload: avgScore(wlScores) ?? 0,
+      stay: avgScore(stayScores) ?? 0,
+      speak: speakScore
     },
     risks: {
-      consideringResignation: { percent: 50, count: 3 },
-      harassmentReports: { percent: 33, count: 2 },
-      difficultToSpeak: { percent: 67, count: 4 }
+      resign: { pct:Math.round(resignCount/total*100), count:resignCount },
+      harassment: { pct:Math.round(totalHarass/total*100), count:totalHarass },
+      speak: { pct:Math.round(speakBadCount/total*100), count:speakBadCount }
     },
-    topConcerns: [
-      { name: '評価制度', count: 4, percent: 67 },
-      { name: 'ハラスメント', count: 4, percent: 67 },
-      { name: '給与・待遇', count: 3, percent: 50 },
-      { name: 'その他', count: 3, percent: 50 },
-      { name: '情報共有不足', count: 2, percent: 33 }
-    ],
-    crossAnalysis: {
-      byTenure: [
-        { group: '1〜3年（5名）', humanRelations: 30, workload: 50, continuation: 40 },
-        { group: '10年以上（1名）', humanRelations: 0, workload: 100, continuation: 100 }
-      ],
-      byRole: [
-        { role: '管理職（部長・課長）', count: 1, humanRelations: 0, workload: 100, continuation: 0 },
-        { role: 'リーダー・主任', count: 2, humanRelations: 25, workload: 25, continuation: 100 },
-        { role: 'パート・アルバイト', count: 1, humanRelations: 0, workload: 100, continuation: 0 }
-      ]
-    },
-    voices: {
-      general: [
-        '上司が話を聞いてくれない',
-        '評価基準を明確にして、業務が終わり次第帰宅する流れを作ってほしい',
-        'いつも残業になるのでならないように調整してほしい'
-      ],
-      harassment: [
-        '岩下店長がハラスメントしてきます。',
-        '同僚がお店の売上を抜いているのを見かけたことがある',
-        '岩下店長が女の子を席につける時に二の腕を触っているのを目撃しました。',
-        '冗談を過ぎた発言をしている人がいる'
-      ]
+    concerns, tenure, role, voices: { free, harassment }
+  };
+}
+
+// ============================================================
+//  DOM更新
+// ============================================================
+function renderScores(d) {
+  const s = d.scores;
+  const items = [
+    {id:'scoreRelations', score:s.relations},
+    {id:'scoreEvaluation', score:s.evaluation},
+    {id:'scoreWorkload', score:s.workload},
+    {id:'scoreStay', score:s.stay},
+    {id:'scoreSpeak', score:s.speak},
+  ];
+  items.forEach(({id,score}) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const {cls, label} = scoreLabel(score);
+    el.querySelector('.score-number').textContent = score;
+    el.querySelector('.score-number').className = `score-number ${cls}`;
+    el.querySelector('.score-badge').textContent = label;
+    el.querySelector('.score-badge').className = `score-badge ${cls}`;
+    el.querySelector('.score-bar-fill').style.width = score + '%';
+    el.className = `score-card ${cls}`;
+    const colors = {danger:'var(--danger)',warning:'var(--warning)',success:'var(--success)'};
+    el.querySelector('.score-bar-fill').style.background = colors[cls];
+  });
+}
+
+function renderRisks(d) {
+  const r = d.risks;
+  // Circles — update text only (SVG stroke stays as-is for simplicity)
+  const circleDefs = [
+    { textId:'riskResignPct', countId:'riskResignCount', data: r.resign },
+    { textId:'riskHarassPct', countId:'riskHarassCount', data: r.harassment },
+    { textId:'riskSpeakPct',  countId:'riskSpeakCount',  data: r.speak },
+  ];
+  circleDefs.forEach(({textId,countId,data}) => {
+    const t = document.getElementById(textId);
+    const c = document.getElementById(countId);
+    if (t) t.textContent = data.pct + '%';
+    if (c) c.textContent = data.count + '名';
+  });
+  // SVG arcs
+  const circumference = 2 * Math.PI * 34; // ~213.6
+  [
+    { id:'arcResign', pct: r.resign.pct },
+    { id:'arcHarass', pct: r.harassment.pct },
+    { id:'arcSpeak',  pct: r.speak.pct },
+  ].forEach(({id,pct}) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const len = (pct/100)*circumference;
+      el.setAttribute('stroke-dasharray', `${len.toFixed(1)} ${circumference.toFixed(1)}`);
     }
+  });
+}
+
+function renderConcerns(d, total) {
+  const el = document.getElementById('concernsList');
+  if (!el) return;
+  if (!d.concerns.length) {
+    el.innerHTML = '<div style="color:var(--text-light);font-size:12px;text-align:center;padding:16px;">回答データなし</div>';
+    return;
+  }
+  const colors = [
+    'linear-gradient(90deg,#DC2626,#9B1C1C)',
+    'linear-gradient(90deg,#DC2626,#9B1C1C)',
+    'linear-gradient(90deg,#D97706,#B45309)',
+    'linear-gradient(90deg,#D97706,#B45309)',
+    'linear-gradient(90deg,#0D9E8E,#0F4C5C)',
+  ];
+  el.innerHTML = d.concerns.map((c,i)=>`
+    <div class="concern-item">
+      <div class="concern-label">${c.name}</div>
+      <div class="concern-track">
+        <div class="concern-fill" style="width:${c.pct}%;background:${colors[i]||colors[4]};">${c.pct}%</div>
+      </div>
+      <div class="concern-count">${c.count}名 (${c.pct}%)</div>
+    </div>`).join('');
+}
+
+function renderCrossTable(tbodyId, rows) {
+  const el = document.getElementById(tbodyId);
+  if (!el) return;
+  el.innerHTML = rows.map(r=>`
+    <tr>
+      <td>${r.group}</td><td>${r.count}名</td>
+      <td>${tagHtml(r.relations)}</td>
+      <td>${tagHtml(r.workload)}</td>
+      <td>${tagHtml(r.stay)}</td>
+    </tr>`).join('');
+}
+
+function renderVoices(d) {
+  const freeEl = document.getElementById('voicesFree');
+  const harassEl = document.getElementById('voicesHarass');
+  const freeCntEl = document.getElementById('voicesFreeCount');
+  const harassCntEl = document.getElementById('voicesHarassCount');
+
+  if (freeCntEl) freeCntEl.textContent = d.voices.free.length;
+  if (harassCntEl) harassCntEl.textContent = d.voices.harassment.length;
+
+  if (freeEl) freeEl.innerHTML = d.voices.free.length
+    ? d.voices.free.map(v=>`<div class="voice-card general"><span class="voice-icon">💬</span>${v}</div>`).join('')
+    : '<div class="voice-card" style="color:var(--text-light);">なし</div>';
+
+  if (harassEl) harassEl.innerHTML = d.voices.harassment.length
+    ? d.voices.harassment.map(v=>`<div class="voice-card harassment"><span class="voice-icon">⚠️</span>${v}</div>`).join('')
+    : '<div class="voice-card" style="color:var(--text-light);">報告なし</div>';
+}
+
+// ============================================================
+//  Chart.js グラフ生成
+// ============================================================
+let radarChartInst, barChartInst, corrChartInst;
+
+function renderCharts(d) {
+  const s = d.scores;
+
+  // ① レーダーチャート
+  const radarCtx = document.getElementById('radarChart');
+  if (radarCtx) {
+    if (radarChartInst) radarChartInst.destroy();
+    radarChartInst = new Chart(radarCtx, {
+      type: 'radar',
+      data: {
+        labels: ['人間関係','評価制度','業務量','継続就業','発言しやすさ'],
+        datasets: [{
+          label: '今月スコア',
+          data: [s.relations, s.evaluation, s.workload, s.stay, s.speak],
+          fill: true,
+          backgroundColor: 'rgba(0,201,167,0.15)',
+          borderColor: '#0D9E8E',
+          pointBackgroundColor: '#0D9E8E',
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          r: {
+            min:0, max:100,
+            ticks:{ stepSize:25, font:{size:10} },
+            pointLabels:{ font:{size:11, family:"'Noto Sans JP'"} },
+            grid:{ color:'rgba(0,0,0,0.07)' }
+          }
+        },
+        plugins: { legend:{ display:false } }
+      }
+    });
+  }
+
+  // ② 属性別スコア比較棒グラフ（勤続年数別）
+  const barCtx = document.getElementById('barChart');
+  if (barCtx) {
+    if (barChartInst) barChartInst.destroy();
+    const tenureLabels = d.tenure.map(t=>t.group + `（${t.count}名）`);
+    barChartInst = new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: tenureLabels,
+        datasets: [
+          { label:'人間関係', data: d.tenure.map(t=>t.relations), backgroundColor:'#DC2626bb', borderRadius:4 },
+          { label:'業務量',   data: d.tenure.map(t=>t.workload),  backgroundColor:'#D97706bb', borderRadius:4 },
+          { label:'継続意向', data: d.tenure.map(t=>t.stay),      backgroundColor:'#0D9E8Ebb', borderRadius:4 },
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        scales:{ y:{ min:0, max:100, ticks:{stepSize:25} } },
+        plugins:{
+          legend:{ position:'bottom', labels:{ font:{size:11, family:"'Noto Sans JP'"} } }
+        }
+      }
+    });
+  }
+
+  // ③ コレスポンデンス分析（バブルチャート）
+  //    X軸: 課題のリスク重みスコア（ハラスメント系>人間関係系>評価系>給与>その他）
+  //    Y軸: 回答率（全回答に対する割合）
+  //    バブルサイズ: 回答人数
+  const corrCtx = document.getElementById('correspondenceChart');
+  if (corrCtx) {
+    if (corrChartInst) corrChartInst.destroy();
+
+    // 課題ごとのリスク重み（X軸位置として使用）
+    const riskWeight = {
+      'ハラスメント': 95,
+      '人間関係': 80,
+      '情報共有不足': 65,
+      '業務量': 60,
+      '給与・待遇': 55,
+      '評価制度': 45,
+      'コミュニケーション': 70,
+      'その他': 30,
+    };
+
+    const bubbleData = d.concerns.map((c, i) => {
+      const xBase = riskWeight[c.name] || (40 - i*5);
+      // X軸: リスク重み + 少しランダム揺れで重なり防止
+      const x = Math.min(99, Math.max(5, xBase + (i % 2 === 0 ? 2 : -2)));
+      const y = c.pct; // Y軸: 回答率%
+      return { x, y, r: Math.max(8, c.count * 7), label: c.name, count: c.count, pct: c.pct };
+    });
+
+    // 役職別データもバブルで追加（別色）
+    const roleData = d.role.map((r, i) => {
+      const concernScore = 100 - ((r.relations||50) + (r.workload||50) + (r.stay||50)) / 3;
+      const x = Math.min(95, Math.max(5, concernScore + i*3));
+      const y = Math.round((1 - (r.relations||50)/100) * 100); // 不満率
+      return { x, y, r: Math.max(8, r.count * 9), label: r.group, count: r.count };
+    });
+
+    corrChartInst = new Chart(corrCtx, {
+      type: 'bubble',
+      data: {
+        datasets: [
+          {
+            label: '不安・課題カテゴリ',
+            data: bubbleData,
+            backgroundColor: bubbleData.map(b =>
+              b.y >= 60 ? 'rgba(230,57,70,0.7)' : b.y >= 40 ? 'rgba(244,162,97,0.7)' : 'rgba(116,185,255,0.7)'
+            ),
+            borderColor: bubbleData.map(b =>
+              b.y >= 60 ? '#DC2626' : b.y >= 40 ? '#D97706' : '#0D9E8E'
+            ),
+            borderWidth: 2,
+          },
+          {
+            label: '役職グループ',
+            data: roleData,
+            backgroundColor: 'rgba(0,201,167,0.45)',
+            borderColor: '#0D9E8E',
+            borderWidth: 2,
+            borderDash: [4,4],
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          x: {
+            min: 0, max: 100,
+            title: { display:true, text:'リスク重み（右ほど高リスク）', font:{size:11} },
+            ticks:{ stepSize:20, callback: v => v+'pt' }
+          },
+          y: {
+            min: 0, max: 100,
+            title: { display:true, text:'回答率・集中度（%）', font:{size:11} },
+            ticks:{ callback: v => v+'%' }
+          }
+        },
+        plugins: {
+          legend: { position:'bottom', labels:{ font:{size:11, family:"'Noto Sans JP'"}, boxWidth:12 } },
+          tooltip: {
+            callbacks: {
+              label: ctx => {
+                const d = ctx.raw;
+                return `${d.label}：${d.pct || ''}%（${d.count}名）`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+}
+
+// ============================================================
+//  メイン初期化
+// ============================================================
+function initReport() {
+  const d = buildReportData();
+
+  // KPIバー
+  document.getElementById('kpi-total').textContent = d.total;
+  document.getElementById('kpi-rate').textContent = d.responseRate !== null ? d.responseRate + '%' : '—%';
+  document.getElementById('kpi-harassment').textContent = d.risks.harassment.count;
+  document.getElementById('kpi-resign').textContent = d.risks.resign.count;
+
+  renderScores(d);
+  renderRisks(d);
+  renderConcerns(d, d.total);
+  renderCrossTable('tenureTableBody', d.tenure);
+  renderCrossTable('roleTableBody', d.role);
+  renderVoices(d);
+  renderCharts(d);
+
+  // localStorage から企業名・担当
+  try {
+    const meta = JSON.parse(localStorage.getItem('surveyMeta') || '{}');
+    if (meta.companyName) document.getElementById('companyName').textContent = meta.companyName;
+    if (meta.period) document.querySelector('.header-meta').textContent = `実施期間：${meta.period} ／ 担当：岩下`;
+  } catch {}
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  initReport();
+  generateAIAnalysis();
+});
+
+// ============================================================
+//  AI分析
+// ============================================================
+async function generateAIAnalysis() {
+  const d = buildReportData();
+  const surveyData = {
+    totalRespondents: d.total,
+    responseRate: d.responseRate,
+    scores: d.scores,
+    risks: d.risks,
+    topConcerns: d.concerns,
+    crossAnalysis: { byTenure: d.tenure, byRole: d.role },
+    voices: d.voices,
   };
 
   const prompt = `あなたはLINKPRANITY（株式会社リンクプラニティ）の組織コンサルタントです。
-以下の月次従業員アンケート結果を分析し、クライアント企業の経営者に提出する詳細な組織コンサルティングレポートをHTML形式で作成してください。
+以下の月次従業員アンケート結果を分析し、クライアント企業の経営者に提出する詳細な組織コンサルティングレポートを作成してください。
 
 【アンケートデータ】
 ${JSON.stringify(surveyData, null, 2)}
 
-【レポート構成の要件】
-以下の3層構造でサマリーを構成してください：
+【重要な出力ルール】
+- 出力はプレーンなHTMLのdivブロックのみ。\`\`\`html や \`\`\` などのコードフェンスは絶対に含めないこと
+- <!DOCTYPE>, <html>, <head>, <body> タグは含めないこと
+- 見出し：<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;">、<h4 style="color:#0F4C5C;margin:12px 0 6px;">
+- 本文：<p style="font-size:12.5px;line-height:1.9;color:#0F2A2A;margin-bottom:12px;">
+- 強調：<strong style="color:#0F4C5C;">
+- リスト：<ul style="padding-left:18px;color:#0F2A2A;font-size:12.5px;line-height:1.9;">
+- テーブル：<table class="risk-table">（ヘッダーは背景#0F4C5C・白文字、行は交互に#E6F7F5）
+- リスクレベル：🔴🟡🟢の絵文字で表現
 
-1. **業界全体の課題**：この企業が属すると想定される飲食・サービス・小売業界全体が抱える構造的な離職・ハラスメント・人材定着の課題を、統計・業界知見を交えて記述（例：飲食業界の年間離職率は約30〜40%、ハラスメント相談件数の業種別傾向など）
+【レポート構成（この順番で、すべて記述すること）】
 
-2. **このアンケート結果から見えた課題**：数値に基づいた客観的な課題分析（人間関係25点、ハラスメント報告2件、離職検討50%など）
+1. 組織診断サマリー（3層構造）
+   ① 業界全体の課題：飲食・サービス業界の離職率・ハラスメント統計・業界平均との比較
+   ② このアンケートから見えた課題：スコア数値に基づく客観分析
+   ③ このクライアント固有の課題：自由記述・クロス分析から見えた特有パターン
 
-3. **このクライアント固有の課題**：自由記述や属性別クロスで見えた、この企業特有のパターン（特定の管理職名が複数の報告に登場、勤続1〜3年層の集中的な不満など）
+2. 主要課題（優先度順に3件）：各課題に数値根拠・影響範囲・リスク度を含む
 
-さらに以下のセクションも作成：
-- 主要課題（優先度順に3件、各課題に数値根拠・影響範囲・背景分析を含む）
-- リスクアセスメント（離職リスク、コンプライアンスリスク、組織硬直化リスクの3観点、レベル・緊急度・根拠を含む）
-- 改善提案・アクションプラン（即時対応・短期・中長期の3フェーズ、各施策にKPIと担当者を含む）
-- LINKPRANITYからの所見（調査会社として、追加調査・内部通報窓口設置・エスカレーション推奨の提言）
+3. リスクアセスメント：離職リスク・コンプライアンスリスク・組織硬直化リスクの3観点
 
-【出力形式】
-- HTMLのdivブロックとして出力（bodyタグ等は不要）
-- 見出しはh3（アクセントカラー：#00c9a7）、h4を使用
-- 重要な数値・キーワードはstrongタグで強調
-- リスクレベルは🔴🟡🟢の絵文字を使用
-- テーブルはCSSクラス "risk-table" を使用（white text, dark background想定）
-- 段落間に適切な余白
-- 具体的で実践的なアドバイスを含めること
-- 絶対に途中で文章を切らないこと。最後まで完全に記述すること
-- 文字数は4000字以上で詳細に記述`;
+4. 改善提案アクションプラン：即時対応・短期（1〜3ヶ月）・中長期（3〜12ヶ月）の3フェーズ
+
+5. LINKPRANITYからの所見：追加調査・外部窓口設置・エスカレーション推奨
+
+絶対に途中で文章を切らないこと。全セクションを最後まで完全に記述すること。`;
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -1036,42 +1392,28 @@ ${JSON.stringify(surveyData, null, 2)}
         messages: [{ role: "user", content: prompt }]
       })
     });
-
     const data = await response.json();
-    const html = data.content.map(i => i.text || "").join("");
+    let rawHtml = data.content.map(i => i.text || "").join("");
 
-    document.getElementById('aiContent').innerHTML = html;
+    // HTMLコードブロックのfenceを除去（```html ... ``` や ``` ... ``` を剥がす）
+    rawHtml = rawHtml
+      .replace(/^```html\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/\s*```\s*$/i, '')
+      .trim();
 
+    document.getElementById('aiContent').innerHTML = rawHtml;
     const now = new Date();
     document.getElementById('aiTimestamp').textContent =
-      `Claude AI による分析 / ${now.toLocaleDateString('ja-JP')} ${now.toLocaleTimeString('ja-JP', {hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;
-
-  } catch (err) {
+      `Claude AI による分析 / ${now.toLocaleDateString('ja-JP')} ${now.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;
+  } catch(err) {
     document.getElementById('aiContent').innerHTML = `
-      <div style="color:rgba(255,255,255,0.5);text-align:center;padding:20px;">
-        <p>⚠️ AI分析の取得に失敗しました。APIキーの設定を確認してください。</p>
-        <p style="font-size:11px;margin-top:8px;">${err.message}</p>
-      </div>`;
+      <p style="color:var(--danger);text-align:center;padding:20px;">
+        ⚠️ AI分析の取得に失敗しました。APIキーの設定を確認してください。<br>
+        <span style="font-size:11px;">${err.message}</span>
+      </p>`;
   }
 }
-
-// localStorage から企業名・KPIデータを読み込む
-function loadStoredData() {
-  try {
-    const stored = localStorage.getItem('surveyData');
-    if (stored) {
-      const d = JSON.parse(stored);
-      if (d.companyName) document.getElementById('companyName').textContent = d.companyName;
-      if (d.totalRespondents) document.getElementById('kpi-total').textContent = d.totalRespondents;
-      if (d.responseRate) document.getElementById('kpi-rate').textContent = d.responseRate + '%';
-      if (d.harassmentCount !== undefined) document.getElementById('kpi-harassment').textContent = d.harassmentCount;
-      if (d.resignCount !== undefined) document.getElementById('kpi-resign').textContent = d.resignCount;
-    }
-  } catch(e) {}
-}
-
-loadStoredData();
-generateAIAnalysis();
 </script>
 </body>
 </html>
