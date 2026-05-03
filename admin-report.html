@@ -639,7 +639,7 @@
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
       <div style="display:flex;gap:8px;align-items:center;">
-        <button onclick="window.print()" style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-border);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;">🖨️ 印刷</button>
+        <div onclick="window.print()" style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-border);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;user-select:none;">🖨️ 印刷・PDF</div>
         <div class="report-badge">月次組織分析レポート</div>
       </div>
       <div class="logo-area">
@@ -667,7 +667,7 @@
         <input type="text" id="inputBusiness" placeholder="例：飲食業（居酒屋チェーン）/ 介護施設の運営 / 建設・土木工事業" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;font-family:inherit;color:var(--text);background:#fff;outline:none;" oninput="syncClientInfo()">
       </div>
       <div>
-        <button onclick="saveClientInfo()" style="background:var(--teal);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">保存</button>
+        <div onclick="saveClientInfo()" style="background:var(--teal);color:#fff;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;user-select:none;">保存</div>
       </div>
     </div>
     <div id="clientInfoSaved" style="font-size:11px;color:var(--success);margin-top:6px;display:none;">✅ 保存しました</div>
@@ -889,9 +889,9 @@
     <div id="aiInitPrompt" style="text-align:center;padding:32px 0 24px;">
       <div style="font-size:13px;color:var(--text-light);margin-bottom:6px;">クライアント情報（名称・事業内容）を入力後、ボタンを押してAI分析を開始してください。</div>
       <div style="font-size:11px;color:var(--text-light);margin-bottom:20px;">※ 1回の分析につきAPIクレジットを消費します。内容確認後に実行してください。</div>
-      <button id="aiRunBtn" onclick="runAIAnalysis()" style="background:var(--teal);color:#fff;border:none;border-radius:10px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;transition:opacity 0.2s;">
+      <div id="aiRunBtn" onclick="runAIAnalysis()" style="background:var(--teal);color:#fff;border-radius:10px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:opacity 0.2s;user-select:none;">
         ✦ AI分析を実行する
-      </button>
+      </div>
     </div>
 
     <div id="aiLoading" style="display:none;text-align:center;padding:40px 0;">
@@ -1469,13 +1469,13 @@ function promptApiKey() {
           style="width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;font-family:inherit;color:var(--text);outline:none;margin-bottom:14px;"
           onkeydown="if(event.key==='Enter')document.getElementById('apiKeyConfirmBtn').click()">
         <div style="display:flex;gap:10px;">
-          <button id="apiKeyConfirmBtn" style="flex:1;background:var(--teal);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">
+          <div id="apiKeyConfirmBtn" style="flex:1;background:var(--teal);color:#fff;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;text-align:center;user-select:none;">
             確認して分析開始
-          </button>
-          <button onclick="document.getElementById('apiKeyModal').remove()" 
-            style="background:var(--bg);color:var(--text-light);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;">
+          </div>
+          <div onclick="document.getElementById('apiKeyModal').remove()" 
+            style="background:var(--bg);color:var(--text-light);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:13px;cursor:pointer;user-select:none;">
             キャンセル
-          </button>
+          </div>
         </div>
         <div style="font-size:10px;color:var(--text-light);margin-top:12px;text-align:center;">
           🔒 キーはブラウザのメモリにのみ保存され、外部に送信されません
@@ -1550,46 +1550,42 @@ async function runAIAnalysis() {
     industryContext = `【サービス業全般の特性】厚生労働省の「令和5年雇用動向調査」によるとサービス業の年間離職率は約15〜20%と全産業平均（約14%）を上回る。人手不足による一人当たり業務量の増大、賃金水準の低さ、キャリアパスの不明確さが離職の主要因。`;
   }
 
-  const prompt = `あなたはLINKPRANITY（株式会社リンクプラニティ）の組織コンサルタントです。以下のアンケートデータと業界知見をもとに、クライアント経営者に提出する組織コンサルティングレポートをHTML形式で作成してください。
+  const prompt = `あなたはLINKPRANITY（株式会社リンクプラニティ）の組織コンサルタントです。以下のデータをもとにHTMLレポートを作成してください。
 
-【クライアント情報】
-- 企業名：${surveyData.clientName}
-- 従業員数：${surveyData.employeeCount}名
-- 事業内容：${surveyData.businessDescription}
+【クライアント情報】企業名：${surveyData.clientName} ／ 従業員数：${surveyData.employeeCount}名 ／ 事業内容：${surveyData.businessDescription}
+【業界知見】${industryContext}
+【アンケート結果】${JSON.stringify(surveyData, null, 2)}
 
-【業界・業種の知見】
-${industryContext}
+【出力ルール】コードフェンス禁止。html/head/bodyタグ禁止。
+- h3: <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">
+- h4: <h4 style="color:#0F4C5C;margin:12px 0 6px;font-size:13px;">
+- p: <p style="font-size:12.5px;line-height:1.9;color:#0F2A2A;margin-bottom:10px;">
+- strong: <strong style="color:#0F4C5C;">
+- ul: <ul style="padding-left:18px;color:#0F2A2A;font-size:12.5px;line-height:1.9;margin-bottom:10px;">
+- table: <table style="width:100%;border-collapse:collapse;font-size:12px;margin:10px 0 16px;">
+- th: <th style="background:#0F4C5C;color:#fff;padding:8px 12px;text-align:left;font-size:11px;">
+- td: <td style="padding:8px 12px;border-bottom:1px solid #D4E2E1;color:#0F2A2A;vertical-align:top;">
+- 偶数行tr: <tr style="background:#E6F7F5;">
+- リスク: 🔴🟡🟢
 
-【アンケート結果】
-${JSON.stringify(surveyData, null, 2)}
+以下の5セクションを順番に、全て完成させること：
 
-【出力ルール（必ず守ること）】
-- \`\`\`html や \`\`\` などのコードフェンスは含めない
-- <!DOCTYPE> <html> <head> <body> タグは含めない
-- 見出し：<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">
-- 小見出し：<h4 style="color:#0F4C5C;margin:12px 0 6px;font-size:13px;">
-- 本文：<p style="font-size:12.5px;line-height:1.9;color:#0F2A2A;margin-bottom:10px;">
-- 強調：<strong style="color:#0F4C5C;">
-- リスト：<ul style="padding-left:18px;color:#0F2A2A;font-size:12.5px;line-height:1.9;margin-bottom:10px;">
-- テーブル：class="risk-table"（thは background:#0F4C5C;color:#fff、偶数行は background:#E6F7F5）
-- リスクレベル：🔴🟡🟢で表現
+<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【1】組織診断サマリー</h3>
+3層構造で記述：①${surveyData.businessDescription}業界全体の課題（統計・離職率・ハラスメント傾向）②今回のアンケート結果の課題③${surveyData.clientName}固有の課題
 
-【レポート構成（この順番で全て完成させること）】
+<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【2】主要課題（優先度順3件）</h3>
+各課題に優先度・数値根拠・影響範囲・リスク度を記載
 
-1. 組織診断サマリー（以下3層を段落で記述）
-   ①【業界全体の課題】${surveyData.businessDescription}業界特有の離職・ハラスメント・人材定着の構造的課題を上記業界知見を活用して具体的に記述
-   ②【今回のアンケート結果から見えた課題】スコア数値・リスク指標に基づく客観分析
-   ③【${surveyData.clientName}固有の課題】自由記述・クロス分析から見えた当社特有のパターン
+<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【3】リスクアセスメント</h3>
+🔴離職リスク・🔴コンプライアンスリスク・🟡組織硬直化リスクをそれぞれtableで表示
 
-2. 主要課題（優先度順3件）：課題名・優先度・数値根拠・影響範囲・リスク度
+<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【4】改善提案アクションプラン</h3>
+即時（1週間以内）・短期（1〜3ヶ月）・中長期（3〜12ヶ月）の3フェーズをtableで表示
 
-3. リスクアセスメント：🔴離職リスク・🔴コンプライアンスリスク・🟡組織硬直化リスク（各テーブル形式）
+<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【5】LINKPRANITYからの所見</h3>
+追加調査・外部窓口設置・エスカレーション提言を記載
 
-4. 改善提案アクションプラン：即時（1週間以内）・短期（1〜3ヶ月）・中長期（3〜12ヶ月）の3フェーズ
-
-5. LINKPRANITYからの所見：追加調査・外部窓口・エスカレーション提言
-
-全セクションを途中で切らず最後まで完成させること。`;
+【5】まで必ず完成させること。`;
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -1602,7 +1598,7 @@ ${JSON.stringify(surveyData, null, 2)}
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-5",
-        max_tokens: 4000,
+        max_tokens: 8000,
         messages: [{ role: "user", content: prompt }]
       })
     });
@@ -1632,7 +1628,7 @@ ${JSON.stringify(surveyData, null, 2)}
     // 再実行ボタンを追加
     const rerunDiv = document.createElement('div');
     rerunDiv.style.cssText = 'text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--teal-border);';
-    rerunDiv.innerHTML = `<button class="rerun-btn" onclick="resetAI()" style="background:var(--bg);color:var(--teal-dark);border:1px solid var(--teal-border);border-radius:8px;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🔄 再分析する</button>`;
+    rerunDiv.innerHTML = `<div class="rerun-btn" onclick="resetAI()" style="background:var(--bg);color:var(--teal-dark);border:1px solid var(--teal-border);border-radius:8px;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer;display:inline-block;user-select:none;">🔄 再分析する</div>`;
     content.appendChild(rerunDiv);
 
   } catch(err) {
