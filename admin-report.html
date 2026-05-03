@@ -1555,48 +1555,57 @@ async function runAIAnalysis() {
   const compactData = {
     回答数: `${d.total}名／従業員${surveyData.employeeCount}名（回答率${surveyData.responseRate}）`,
     スコア: `人間関係${d.scores.relations}点・評価制度${d.scores.evaluation}点・業務量${d.scores.workload}点・継続就業${d.scores.stay}点・発言しやすさ${d.scores.speak}点`,
-    リスク: `離職検討${d.risks.resign.pct}%（${d.risks.resign.count}名）・ハラスメント報告${d.risks.harassment.pct}%（${d.risks.harassment.count}名）・言いづらさ${d.risks.speak.pct}%（${d.risks.speak.count}名）`,
-    不安課題TOP5: d.concerns.map(c=>`${c.name}${c.pct}%（${c.count}名）`).join('、'),
-    勤続年数別: d.tenure.map(t=>`${t.group}${t.count}名：人間関係${t.relations}・業務量${t.workload}・継続意向${t.stay}`).join(' ／ '),
-    役職別: d.role.map(r=>`${r.group}${r.count}名：人間関係${r.relations}・業務量${r.workload}・継続意向${r.stay}`).join(' ／ '),
-    一般コメント: d.voices.free.join('／'),
-    ハラスメント報告: d.voices.harassment.join('／'),
+    リスク: `離職検討${d.risks.resign.pct}%（${d.risks.resign.count}名）・ハラスメント${d.risks.harassment.pct}%（${d.risks.harassment.count}名）・言いづらさ${d.risks.speak.pct}%（${d.risks.speak.count}名）`,
+    不安課題: d.concerns.map(c=>`${c.name}${c.pct}%`).join('・'),
+    勤続年数別: d.tenure.map(t=>`${t.group}${t.count}名:関係${t.relations}/業務${t.workload}/継続${t.stay}`).join(' / '),
+    役職別: d.role.map(r=>`${r.group}${r.count}名:関係${r.relations}/業務${r.workload}/継続${r.stay}`).join(' / '),
+    コメント: d.voices.free.join('。'),
+    ハラスメント: d.voices.harassment.join('。'),
   };
 
-  const prompt = `あなたはLINKPRANITY（株式会社リンクプラニティ）の組織コンサルタントです。以下のデータをもとにHTMLレポートを作成してください。
+  const prompt = `あなたはLINKPRANITY組織コンサルタントです。以下のデータを分析し、JSONのみで回答してください。説明文・コードフェンス・HTMLタグは一切不要です。
 
-【クライアント情報】企業名：${surveyData.clientName} ／ 従業員数：${surveyData.employeeCount}名 ／ 事業内容：${surveyData.businessDescription}
-【業界知見】${industryContext}
-【アンケートデータ】
-${Object.entries(compactData).map(([k,v])=>`・${k}：${v}`).join('\n')}
+企業名:${surveyData.clientName} 従業員数:${surveyData.employeeCount}名 事業内容:${surveyData.businessDescription}
+業界知見:${industryContext}
+データ:${Object.entries(compactData).map(([k,v])=>`${k}=${v}`).join(' | ')}
 
-【出力ルール】コードフェンス禁止。html/head/bodyタグ禁止。
-- h3: <h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">
-- h4: <h4 style="color:#0F4C5C;margin:12px 0 6px;font-size:13px;">
-- p: <p style="font-size:12.5px;line-height:1.9;color:#0F2A2A;margin-bottom:10px;">
-- strong: <strong style="color:#0F4C5C;">
-- ul: <ul style="padding-left:18px;color:#0F2A2A;font-size:12.5px;line-height:1.9;margin-bottom:10px;">
-- table: <table style="width:100%;border-collapse:collapse;font-size:12px;margin:10px 0 16px;">
-- th: <th style="background:#0F4C5C;color:#fff;padding:8px 12px;text-align:left;font-size:11px;">
-- td: <td style="padding:8px 12px;border-bottom:1px solid #D4E2E1;color:#0F2A2A;vertical-align:top;">
-- 偶数行tr: <tr style="background:#E6F7F5;">
-- リスク表記: 🔴🟡🟢
-
-以下の5セクションを順番に全て完成させること：
-
-<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【1】組織診断サマリー</h3>
-3層構造で各層2〜3段落以内で簡潔に記述：①${surveyData.businessDescription}業界全体の課題 ②今回のアンケート結果の課題 ③${surveyData.clientName}固有の課題
-
-<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【2】主要課題（優先度順3件）</h3>
-優先度・課題・数値根拠・リスク度の4列tableで3行。
-
-<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【3】リスクアセスメント</h3>
-🔴離職リスク・🔴コンプライアンスリスク・🟡組織硬直化リスクを各3〜4行のtableで表示。
-
-<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 8px;font-size:14px;">【4】改善提案アクションプラン</h3>
-フェーズ・施策・担当・KPIの4列table。即時（1週間以内）2行・短期（1〜3ヶ月）2行・中長期（3〜12ヶ月）2行の計6行で完結させること。
-
-必ず【4】まで完成させること。`;
+以下のJSON形式で厳密に出力してください（文字列は簡潔に、各項目100文字以内）:
+{
+  "summary": {
+    "industry": "業界全体の課題（2〜3文）",
+    "survey": "アンケート結果から見えた課題（2〜3文）",
+    "client": "クライアント固有の課題（2〜3文）"
+  },
+  "issues": [
+    {"priority":"最優先","name":"課題名","basis":"数値根拠","risk":"🔴高"},
+    {"priority":"第2位","name":"課題名","basis":"数値根拠","risk":"🔴高"},
+    {"priority":"第3位","name":"課題名","basis":"数値根拠","risk":"🟡中"}
+  ],
+  "risks": {
+    "resign": [
+      {"item":"リスク項目","status":"現状","impact":"影響"},
+      {"item":"リスク項目","status":"現状","impact":"影響"},
+      {"item":"リスク項目","status":"現状","impact":"影響"}
+    ],
+    "compliance": [
+      {"item":"リスク項目","legal":"法的根拠","action":"対応期限"},
+      {"item":"リスク項目","legal":"法的根拠","action":"対応期限"},
+      {"item":"リスク項目","legal":"法的根拠","action":"対応期限"}
+    ],
+    "org": [
+      {"item":"リスク項目","status":"現状","impact":"影響"},
+      {"item":"リスク項目","status":"現状","impact":"影響"}
+    ]
+  },
+  "actions": [
+    {"phase":"即時（1週間以内）","action":"施策内容","owner":"担当","kpi":"KPI指標"},
+    {"phase":"即時（1週間以内）","action":"施策内容","owner":"担当","kpi":"KPI指標"},
+    {"phase":"短期（1〜3ヶ月）","action":"施策内容","owner":"担当","kpi":"KPI指標"},
+    {"phase":"短期（1〜3ヶ月）","action":"施策内容","owner":"担当","kpi":"KPI指標"},
+    {"phase":"中長期（3〜12ヶ月）","action":"施策内容","owner":"担当","kpi":"KPI指標"},
+    {"phase":"中長期（3〜12ヶ月）","action":"施策内容","owner":"担当","kpi":"KPI指標"}
+  ]
+}`;
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -1609,7 +1618,7 @@ ${Object.entries(compactData).map(([k,v])=>`・${k}：${v}`).join('\n')}
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-5",
-        max_tokens: 8000,
+        max_tokens: 4000,
         messages: [{ role: "user", content: prompt }]
       })
     });
@@ -1617,26 +1626,65 @@ ${Object.entries(compactData).map(([k,v])=>`・${k}：${v}`).join('\n')}
     if (!response.ok) {
       const errData = await response.json().catch(() => ({}));
       const errMsg = errData?.error?.message || `HTTPエラー ${response.status}`;
-      if (response.status === 401) {
-        clearApiKey(); // 無効キーを削除
-        throw new Error('APIキーが無効です。再入力してください。（' + errMsg + '）');
-      }
+      if (response.status === 401) { clearApiKey(); throw new Error('APIキーが無効です。再入力してください。'); }
       throw new Error(errMsg);
     }
 
     const data = await response.json();
-    let rawHtml = data.content.map(i => i.text || "").join("");
-    rawHtml = rawHtml.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```\s*$/i, '').trim();
+    let raw = data.content.map(i => i.text || "").join("").trim();
+    // JSONフェンス除去
+    raw = raw.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/\s*```\s*$/i,'').trim();
+    const r = JSON.parse(raw);
+
+    // JS側でHTMLを組み立て（切れない）
+    const h3 = (t) => `<h3 style="color:#0A7A6E;border-bottom:2px solid #A7DED9;padding-bottom:6px;margin:20px 0 10px;font-size:14px;">${t}</h3>`;
+    const p  = (t) => `<p style="font-size:12.5px;line-height:1.9;color:#0F2A2A;margin-bottom:8px;">${t}</p>`;
+    const th = (t) => `<th style="background:#0F4C5C;color:#fff;padding:8px 12px;text-align:left;font-size:11px;">${t}</th>`;
+    const td = (t) => `<td style="padding:8px 12px;border-bottom:1px solid #D4E2E1;color:#0F2A2A;vertical-align:top;font-size:12px;">${t}</td>`;
+    const tbl = (heads, rows) => `<table style="width:100%;border-collapse:collapse;margin:10px 0 16px;">
+      <thead><tr>${heads.map(th).join('')}</tr></thead>
+      <tbody>${rows.map((row,i)=>`<tr style="${i%2===1?'background:#E6F7F5;':''}">${row.map(td).join('')}</tr>`).join('')}</tbody>
+    </table>`;
+
+    let html = '';
+
+    // 【1】診断サマリー
+    html += h3('【1】組織診断サマリー');
+    html += `<h4 style="color:#0F4C5C;font-size:13px;margin:10px 0 4px;">①${surveyData.businessDescription}業界全体の課題</h4>`;
+    html += p(r.summary.industry);
+    html += `<h4 style="color:#0F4C5C;font-size:13px;margin:10px 0 4px;">②アンケート結果から見えた課題</h4>`;
+    html += p(r.summary.survey);
+    html += `<h4 style="color:#0F4C5C;font-size:13px;margin:10px 0 4px;">③${surveyData.clientName}固有の課題</h4>`;
+    html += p(r.summary.client);
+
+    // 【2】主要課題
+    html += h3('【2】主要課題（優先度順3件）');
+    html += tbl(['優先度','課題名','数値根拠','リスク度'],
+      r.issues.map(i=>[i.priority, `<strong style="color:#0F4C5C;">${i.name}</strong>`, i.basis, i.risk]));
+
+    // 【3】リスクアセスメント
+    html += h3('【3】リスクアセスメント');
+    html += `<p style="font-size:12px;font-weight:700;color:#DC2626;margin:8px 0 4px;">🔴 離職リスク</p>`;
+    html += tbl(['リスク項目','現状','影響'], r.risks.resign.map(i=>[i.item,i.status,i.impact]));
+    html += `<p style="font-size:12px;font-weight:700;color:#DC2626;margin:8px 0 4px;">🔴 コンプライアンスリスク</p>`;
+    html += tbl(['リスク項目','法的根拠','対応期限'], r.risks.compliance.map(i=>[i.item,i.legal,i.action]));
+    html += `<p style="font-size:12px;font-weight:700;color:#D97706;margin:8px 0 4px;">🟡 組織硬直化リスク</p>`;
+    html += tbl(['リスク項目','現状','中長期的影響'], r.risks.org.map(i=>[i.item,i.status,i.impact]));
+
+    // 【4】アクションプラン
+    html += h3('【4】改善提案アクションプラン');
+    html += tbl(['フェーズ','施策内容','担当','KPI'],
+      r.actions.map(a=>[`<strong style="color:#0F4C5C;">${a.phase}</strong>`, a.action, a.owner, a.kpi]));
 
     loading.style.display = 'none';
     content.style.display = 'block';
-    content.innerHTML = rawHtml;
+    content.innerHTML = html;
 
     const now = new Date();
     document.getElementById('aiTimestamp').textContent =
       `Claude AI による分析 / ${now.toLocaleDateString('ja-JP')} ${now.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit',second:'2-digit'})} ／ 対象：${surveyData.clientName}`;
 
-    // 再実行ボタンを追加
+    // 再分析ボタン
     const rerunDiv = document.createElement('div');
     rerunDiv.style.cssText = 'text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--teal-border);';
     rerunDiv.innerHTML = `<div class="rerun-btn" onclick="resetAI()" style="background:var(--bg);color:var(--teal-dark);border:1px solid var(--teal-border);border-radius:8px;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer;display:inline-block;user-select:none;">🔄 再分析する</div>`;
