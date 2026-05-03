@@ -568,62 +568,162 @@
 
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+  /* ============================================================
+     印刷スタイル — A4縦最適化
+  ============================================================ */
   @media print {
-    /* 印刷不要UI非表示 */
-    .no-print-hide { display: none !important; }
-    .print-only { display: block !important; }
-    #aiInitPrompt { display: none !important; }
-    #aiRunBtn { display: none !important; }
+    /* A4サイズ・余白設定 */
+    @page {
+      size: A4 portrait;
+      margin: 12mm 12mm 14mm 12mm;
+    }
+
+    /* カラー・背景を印刷に強制適用 */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    /* 不要UI非表示 */
+    .no-print-hide,
+    #aiInitPrompt,
+    #aiRunBtn,
+    #aiLoading,
     .rerun-btn { display: none !important; }
     input { border: none !important; background: transparent !important; }
 
-    /* 基本リセット */
-    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    body { background: #fff !important; font-size: 11px; }
-    .main-content { max-width: 100%; padding: 12px; }
+    /* 基本フォント・背景 */
+    html, body {
+      background: #fff !important;
+      font-size: 10px !important;
+      line-height: 1.5 !important;
+    }
+    .main-content { max-width: 100% !important; padding: 6px 0 !important; }
 
-    /* ヘッダー・KPIバーは1ページ目に固定 */
-    .report-header { padding: 12px 20px; }
-    .header-left h1 { font-size: 16px; }
-    .kpi-bar { break-inside: avoid; }
+    /* ヘッダー */
+    .report-header { padding: 8px 14px !important; border-bottom: 2px solid #0D9E8E !important; }
+    .header-left h1 { font-size: 14px !important; }
+    .header-left .company-placeholder { font-size: 11px !important; }
+    .header-meta { font-size: 10px !important; }
+    .report-badge { font-size: 9px !important; padding: 3px 8px !important; }
+    .logo-area img { height: 22px !important; }
 
-    /* 改ページ禁止 */
-    .card { break-inside: avoid; page-break-inside: avoid; margin-bottom: 10px; box-shadow: none; border: 1px solid #D4E2E1; }
-    .ai-section { break-inside: avoid; page-break-inside: avoid; box-shadow: none; }
-    .risk-circles { break-inside: avoid; }
-    .score-grid { break-inside: avoid; }
-    .section-title { break-after: avoid; page-break-after: avoid; margin-top: 16px; }
+    /* KPIバー */
+    .kpi-bar { break-inside: avoid !important; page-break-inside: avoid !important; }
+    .kpi-item { padding: 6px 10px !important; }
+    .kpi-value { font-size: 18px !important; }
+    .kpi-label { font-size: 9px !important; }
 
-    /* グリッドを1列化（印刷時の横はみ出し防止） */
-    .score-grid { grid-template-columns: repeat(5, 1fr); gap: 6px; }
-    .card-grid-2 { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .risk-circles { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    /* セクションタイトル */
+    .section-title {
+      font-size: 12px !important;
+      margin: 10px 0 8px !important;
+      break-after: avoid !important;
+      page-break-after: avoid !important;
+    }
+    .section-subtitle { font-size: 10px !important; margin-bottom: 6px !important; }
 
-    /* グラフは高さを抑えて確実に収める */
-    .chart-wrap { height: 160px !important; }
-    .chart-wrap canvas { max-height: 160px !important; }
-    #correspondenceChart { max-height: 200px !important; }
-    [style*="height:320px"] { height: 200px !important; }
+    /* カード */
+    .card {
+      box-shadow: none !important;
+      border: 1px solid #D4E2E1 !important;
+      padding: 10px !important;
+      margin-bottom: 8px !important;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
 
-    /* 分布バーのバックグラウンド印刷保証 */
-    .dist-fill { -webkit-print-color-adjust: exact !important; }
-    .concern-fill { -webkit-print-color-adjust: exact !important; }
-    .score-bar-fill { -webkit-print-color-adjust: exact !important; }
+    /* グリッド — 2列維持（A4幅で十分） */
+    .card-grid-2 { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+    .score-grid {
+      grid-template-columns: repeat(5, 1fr) !important;
+      gap: 5px !important;
+      break-inside: avoid !important;
+    }
+    .risk-circles {
+      grid-template-columns: repeat(3, 1fr) !important;
+      break-inside: avoid !important;
+    }
 
-    /* KPIバー・ヘッダー背景印刷保証 */
-    .kpi-bar { -webkit-print-color-adjust: exact !important; }
-    .kpi-item { padding: 8px 12px; }
-    .kpi-value { font-size: 22px; }
+    /* スコアカード */
+    .score-number { font-size: 20px !important; }
+    .score-label { font-size: 9px !important; }
+    .score-badge { font-size: 8px !important; }
+
+    /* 分布バー */
+    .dist-label { font-size: 9px !important; width: 100px !important; }
+    .dist-fill { font-size: 9px !important; }
+    .dist-count { font-size: 9px !important; }
+    .dist-item { margin-bottom: 4px !important; }
+
+    /* リスクサークル */
+    .risk-circle-card { padding: 10px 6px !important; }
+    .risk-count { font-size: 16px !important; }
+    .risk-desc { font-size: 9px !important; }
+
+    /* 課題バー */
+    .concern-label { font-size: 9px !important; width: 80px !important; }
+    .concern-fill { font-size: 9px !important; }
+    .concern-count { font-size: 9px !important; }
+    .concern-item { margin-bottom: 5px !important; }
+
+    /* グラフ — 印刷時は縮小して確実に収める */
+    .chart-wrap {
+      height: 140px !important;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+    .chart-wrap canvas { max-height: 140px !important; }
+    #correspondenceChart,
+    [style*="height:320px"],
+    [style*="height: 320px"] {
+      height: 160px !important;
+      max-height: 160px !important;
+    }
+
+    /* テーブル — 行単位で改ページ禁止 */
+    table {
+      width: 100% !important;
+      font-size: 9px !important;
+      border-collapse: collapse !important;
+      break-inside: auto !important;
+    }
+    thead { break-inside: avoid !important; display: table-header-group !important; }
+    tr {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+    th { font-size: 9px !important; padding: 5px 7px !important; }
+    td { font-size: 9px !important; padding: 5px 7px !important; }
+
+    /* AI分析セクション */
+    .ai-section {
+      box-shadow: none !important;
+      border: 1px solid #A7DED9 !important;
+      padding: 12px !important;
+      break-inside: auto !important;
+    }
+    .ai-badge { font-size: 9px !important; }
+    .ai-section h2 { font-size: 13px !important; }
+    .ai-section h3 { font-size: 11px !important; margin: 10px 0 5px !important; }
+    .ai-section h4 { font-size: 10px !important; }
+    .ai-section p { font-size: 9.5px !important; line-height: 1.6 !important; margin-bottom: 6px !important; }
+    #aiContent table { break-inside: auto !important; }
+    #aiContent thead { display: table-header-group !important; }
+    #aiContent tr { break-inside: avoid !important; page-break-inside: avoid !important; }
+    #aiContent th { font-size: 9px !important; padding: 5px 7px !important; }
+    #aiContent td { font-size: 9px !important; padding: 5px 7px !important; line-height: 1.5 !important; }
+
+    /* 従業員の声 */
+    .voice-card { font-size: 9px !important; padding: 5px 8px !important; margin-bottom: 5px !important; }
+
+    /* クロス分析テーブル */
+    .tag { font-size: 8px !important; padding: 1px 5px !important; }
 
     /* フッター */
-    .report-footer { margin-top: 10px; padding: 10px; font-size: 10px; }
-
-    /* AIタイムスタンプ */
-    #aiTimestamp { font-size: 10px; }
-
-    /* テーブルの見切れ防止 */
-    table { break-inside: avoid; page-break-inside: avoid; }
-    td, th { padding: 5px 8px; font-size: 10px; }
+    .report-footer { padding: 8px !important; font-size: 9px !important; margin-top: 8px !important; }
+    #aiTimestamp { font-size: 9px !important; }
   }
 </style>
 </head>
